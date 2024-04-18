@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Facility Servis</title>
+<script src="js/jquery-2.1.3.min.js"></script>
+<link rel="stylesheet" href="css/sample22.css">
+
+
+
+</head>
+<body>
+
+<!-- コンテンツ表示画面 -->
+
+<!-- header -->
+<div class="header">
+    <h1>マンション　管理アプリ</h1>
+</div>
+
+
+<!-- 一覧表示 -->
+<div id="cambas">
+  
+    <canvas id="plane" width="500" height="300"> </canvas>
+
+    <canvas id="Cross section" width="300" height="300"> </canvas>
+</div>
+
+<!-- 選択 -->
+<div class="title">
+  <div class="title2"> 題名：<input type="text" id="title"> </div>
+  <div class="title2"> 名前：<input type="text" id="uname"> </div>
+</div>
+
+<div id="select">
+  <div class="select"> 階高：
+   <select id="floar"></select>
+  </div>
+<div class="select">場所1:
+  <select id="eria">
+    <option value=""></option>
+    <option value="廊下">廊下</option>
+    <option value="階段">階段</option>
+    <option value="ｴﾚﾍﾞｰﾀ">ｴﾚﾍﾞｰﾀ</option>
+    <option value="ﾍﾞﾗﾝﾀﾞ">ﾍﾞﾗﾝﾀﾞ</option>
+    <option value="ｴﾝﾄﾗﾝｽ">ｴﾝﾄﾗﾝｽ</option>
+    <option value="その他">その他</option>
+  </select>
+</div>
+<div class="select">場所2:
+  <select id="eria2">
+    <option value=""></option>
+    <option value="中央">中央</option>
+    <option value="北側">北側</option>
+    <option value="南側">南側</option>
+    <option value="その他">その他</option>
+  </select>
+</div>
+<div class="select"> 部屋番号：
+  <select id="room"></select>
+  <option value=""></option>
+ </div>
+<div>  <button id="send">画像添付</button></div>
+</div>
+
+<!-- 送信 -->
+
+    <div>
+        <textarea id="text" cols="30" rows="10">コメント欄</textarea>
+        <button id="send">送信</button>
+    </div>
+  
+
+
+<!-- 投稿表示 -->
+<div id="view" style="overflow: auto; height:300px"></div>
+
+
+
+
+
+
+
+
+<!--/ コンテンツ表示画面 -->
+
+<script>
+// セレクトBox記載
+       function selectBoxCreate(start,end){
+            let str ="";
+            let i = "";
+            for(let i=start; i<end; i+=1 ){
+              str +=`<option>${i+"階"}</option>`;
+            }
+            return str;
+        }
+        const floar = selectBoxCreate(1,6)
+            console.log(floar)
+            $("#floar").html(floar);
+
+        function selectBoxCreate(start,end){
+          let strr ='<option value=""> </option>';
+            let j ="";
+            for(let j=start; j<end; j+=1 ){
+              strr +=`<option>${j+"号室"}</option>`;
+            }
+            return strr;
+
+        }
+        const room = selectBoxCreate(1,6)
+        console.log(room)
+        $("#room").html(room);
+
+
+
+ // <!-- selectクリックイベント -->
+     $("select").on("click",function(){
+            
+   // 階高記載
+      const strrr = document.getElementById("floar").value;
+   //  場所１記載
+      const strrr2 = document.getElementById("eria").value;
+   // 場所２記載
+      const strrr3 = document.getElementById("eria2").value;
+   // 部屋番号記載
+      const strrr4 = document.getElementById("room").value;
+   // 題名記載
+      const strrr5 = document.getElementById("title").value;
+
+
+      var strrrr = "Title:"+strrr5+"\n\n  "+strrr+"  "+strrr2+"  "+strrr3+"  "+strrr4+": ";
+
+      $("#text").html(strrrr);
+      console.log(strrr);
+ })
+
+
+
+
+// Canbas記載事項
+    // plane記載
+        var canvas = document.getElementById("plane");
+        if (canvas.getContext) {
+          var ctx = canvas.getContext("2d");
+        //   ctx.fillStyle = "rgb(200, 0, 0)";
+          ctx.fillStyle = "rgba(0, 0, 0, 0.9)";
+          ctx.font = "20px Times New Roman";
+          ctx.fillText("平面", 10, 20);
+          ctx.strokeRect(150, 240, 50, 50);
+          ctx.strokeRect(280, 240, 80, 50);
+          ctx.strokeRect(30, 70, 450, 170);
+          // 居室
+          ctx.strokeRect(30, 70, 90, 120);
+          ctx.fillText("401", 60, 140);
+          ctx.strokeRect(120, 70, 90, 120);
+          ctx.fillText("402", 150, 140);
+          ctx.strokeRect(210, 70, 90, 120);
+          ctx.fillText("403", 240, 140);
+          ctx.strokeRect(300, 70, 90, 120);
+          ctx.fillText("404", 330, 140);
+          ctx.strokeRect(390, 70, 90, 120);
+          ctx.fillText("405", 420, 140);
+          ctx.fillText("廊下", 240, 220);
+          ctx.fillText("EL", 160, 270);
+          ctx.fillText("階段", 300, 270);
+          // 北南面
+          ctx.font = "15px Times New Roman";
+          ctx.fillText("北側", 20, 37);
+          ctx.fillText("南側", 460, 37);
+        }
+
+    // Cross section記載
+         var canvas = document.getElementById("Cross section");
+        if (canvas.getContext) {
+          var ctx = canvas.getContext("2d");
+        //  描画色指定 
+          ctx.fillStyle = "rgba(0, 0, 0, 0.9)";
+          ctx.font = "20px Times New Roman";
+          ctx.strokeStyle = "rgba(0, 0, 0, 0.8)";
+        // 描画位置指定
+          ctx.fillText("立面", 10, 20);
+          ctx.fillText("1F", 20, 290);
+          ctx.fillText("2F", 20, 240);
+          ctx.fillText("3F", 20, 190);
+          ctx.fillText("4F", 20, 140);
+          ctx.fillText("5F", 20, 90);
+
+          ctx.strokeRect(10, 60, 280, 50);
+          ctx.strokeRect(10, 110, 280, 50);
+          ctx.strokeRect(10, 160, 280, 50);
+          ctx.strokeRect(10, 210, 280, 50);
+          ctx.strokeRect(10, 260, 280, 50);
+
+
+
+          ctx.font = "15px Times New Roman";
+          ctx.fillText("北側", 20, 37);
+          ctx.fillText("南側", 260, 37);
+
+          ctx.font = "10px Times New Roman";
+          ctx.fillText("EL", 110, 45);
+          ctx.fillText("階段", 195, 45);
+          
+          ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+          ctx.strokeRect(100, 35, 30, 265);
+          ctx.fillRect(100, 35, 30, 265);
+          ctx.strokeRect(190, 35, 30, 265);
+          ctx.fillRect(190, 35, 30, 265);
+
+
+        // 円表示
+
+          ctx.fillStyle = "rgba(255, 165, 0, 0.5)";
+          ctx.arc(20, 65, 10, 0, Math.PI * 2, true);
+          ctx.moveTo(95, 65);
+          ctx.stroke();
+          ctx.fill();
+          
+        }
+
+
+
+
+
+    //     // 画像アップロード
+    //     const onFileInputChange = useCallback(async (e) => {
+    //         if (e.target?.files) {
+    //      // 画像データの取得
+    //       const file = e.target.files[0];
+    //        if (file) {
+    //          const reader = new FileReader();
+    //          const imgReader = new Image();
+    //          reader.readAsDataURL(file);
+    //          reader.onload = () => {
+    //          imgReader.src = reader.result;
+    //          imgReader.onload = () => {
+    //         // 画像のリサイズ
+    //           const imgType = imgReader.src.substring(
+    //           5,
+    //           imgReader.src.indexOf(";")
+    //         );
+    //         const imgHeight =
+    //           imgReader.height * (IMAGE_WIDTH / imgReader.width);
+    //         const canvas = document.createElement("canvas");
+    //         canvas.width = imgWidth;
+    //         canvas.height = imgHeight;
+    //         const ctx = canvas.getContext("2d");
+    //         ctx.drawImage(imgReader, 0, 0, imgWidth, imgHeight);
+    //         // 画像の保存
+    //         setImage(canvas.toDataURL(imgType));
+    //       };
+    //     };
+    //   }
+    // }
+  
+  // }, []);
+
+
+    
+
+</script>
+
+<style>
+    canvas {
+      border: 1px solid black;
+      margin: 3px;
+    }
+</style>
+
+
+
+
+
+
+
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- JQuery -->
+
+
+<!--** 以下Firebase **-->
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
+    import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved } 
+    from "https://www.gstatic.com/firebasejs/10.3.1/firebase-database.js";
+
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyB3BfhQ-XeUX-gUa1X0m874B6eT2bsQMLY",
+      authDomain: "sample-34f24.firebaseapp.com",
+      projectId: "sample-34f24",
+      storageBucket: "sample-34f24.appspot.com",
+      messagingSenderId: "95821265872",
+      appId: "1:95821265872:web:85c8af8ed6f3b138c117d5"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db  = getDatabase(app);
+    const dbRef = ref(db,"chat")
+
+// date送信処理
+    $("#send").on("click",function(){
+       const msg ={
+          uname : $("#uname").val(),
+          text  : $("#text").val()
+        
+       }
+      const newPostRef = push(dbRef);  // ユニークキーを生成
+    //    console.log(dbRef)
+       set(newPostRef,msg);
+    });
+
+// date受信処理
+   onChildAdded(dbRef,function(data){
+    const msg = data.val();
+    const key = data.key; //ユニークkey
+    let h = '<p>';
+        h += msg.uname;
+        h += '<br>';
+        h += msg.text;
+        h += '</br>'
+        h += '</p>';
+        $("#view").append(h); // #outputの最後に追加 
+        // console.log(h)
+   })
+
+
+
+
+
+
+ </script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
