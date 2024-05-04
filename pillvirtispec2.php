@@ -7,6 +7,10 @@ $username = $_SESSION['username'];
 $gen_name = $_SESSION['gen_name'];
 
 
+$gr_name = $_POST['gr_name'];
+
+
+
 
 
 require_once('funcs.php');
@@ -26,7 +30,7 @@ $status2 = $stmt->execute();
 // var_dump($status);
 
 $select = "<select name='gr_name' style='color:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background-color:#8EA9DB; border-radius:5px; width:200px;'>";
-$select .= "<br><option value=''>-</option>";
+$select .= "<br><option value='-'>-</option>";
 // 配列グループ作成
 $gr_name_a= array();
 $gr_name_b= "";
@@ -49,58 +53,58 @@ else{
       $gr_name_b = array_unique($gr_name_a);
 
       if($gr_name_c != $gr_name_b ){
-        // if($gr_name == $result2['gr_name']){
+        if($gr_name == $result2['gr_name']){
           
-        //   $select .= '<option value="'.$result2['gr_name'].'"selected>'.$result2['gr_name'].'</option>';
-        // }
-        // elseif($gr_name == $result2['gr_name']){
+          $select .= '<option value="'.$result2['gr_name'].'"selected>'.$result2['gr_name'].'</option>';
+        }
+        elseif($gr_name == $result2['gr_name']){
 
-        //   $select .= '<option value="'.$result2['gr_name'].'"selected>'.$result2['gr_name'].'</option>';
-        // }
+          $select .= '<option value="'.$result2['gr_name'].'"selected>'.$result2['gr_name'].'</option>';
+        }
       
-        // else{
+        else{
         
           $select .= '<option value="'.$result2['gr_name'].'">'.$result2['gr_name'].'</option>';
-        // }
+        }
         
       }
     }
     $select .= '</select>';
     }
-  
+
 
  // ３．断面選択＿断面名抽出
+if($gr_name != null){
+
+$stmt = $pdo->prepare("SELECT * from pillcrossspec WHERE gr_name = :gr_name");
+$stmt->bindValue(':gr_name', $gr_name, PDO::PARAM_STR);
+$status3 = $stmt->execute();
 
 
-// $stmt = $pdo->prepare("SELECT * from pillcrossspec WHERE gr_name = :gr_name");
-// $stmt->bindValue(':gr_name', $gr_name, PDO::PARAM_STR);
-// $status3 = $stmt->execute();
+
+// var_dump($status);
+
+$select3 = "<select name='pill_crossnum[]' style='color:white; border-color:#3b82f6;color:white; font-size:16px;margin:5px; background-color:#8EA9DB; border-radius:5px; width:200px;height:30px;'>";
+$select3 .= "<br><option value='-'>-</option>";
+// 配列グループ作成
 
 
-
-// // var_dump($status);
-
-// $select3 = "<select name='pill_crossnum[]' style='color:white; border-color:#3b82f6;color:white; font-size:16px;margin:5px; background-color:#8EA9DB; border-radius:5px; width:200px;height:30px;'>";
-// $select3 .= "<br><option value=''>-</option>";
-// // 配列グループ作成
-
-
-// if($status3==false) {
-//   //execute（SQL実行時にエラーがある場合）
-//   $error = $stmt->errorInfo();
-//   exit("ErrorQuery:".$error[2]);
-// }
-// else{
-// //Selectデータの数だけ自動でループしてくれる
-// //FETCH_ASSOC=http://php.net/manual/ja/pdostatement.fetch.php
-//   while( $result3 = $stmt->fetch(PDO::FETCH_ASSOC)){ 
-//           $select3 .= '<option value="'.$result3['pill_crossnum'].'">'.$result3['pill_crossnum'].'</option>';
-//         }
+if($status3==false) {
+  //execute（SQL実行時にエラーがある場合）
+  $error = $stmt->errorInfo();
+  exit("ErrorQuery:".$error[2]);
+}
+else{
+//Selectデータの数だけ自動でループしてくれる
+//FETCH_ASSOC=http://php.net/manual/ja/pdostatement.fetch.php
+  while( $result3 = $stmt->fetch(PDO::FETCH_ASSOC)){ 
+          $select3 .= '<option value="'.$result3['pill_crossnum'].'">'.$result3['pill_crossnum'].'</option>';
+        }
         
-//       }
+      }
     
-//     $select3 .= '</select>';
-
+    $select3 .= '</select>';
+    };
 
 
 
@@ -108,7 +112,7 @@ else{
 
 
 // ４．フロア名表示＿フロア情報抽出
-$stmt = $pdo->prepare("SELECT * FROM floor WHERE gen_name = :gen_name ORDER BY id DESC ");
+$stmt = $pdo->prepare("SELECT * FROM floor WHERE gen_name = :gen_name ORDER BY id DESC");
 $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
 $status = $stmt->execute();
 
@@ -131,7 +135,8 @@ else{
       $view_v .= '<p style="margin:10px;">' . $result['floor_num'] . '</p>';
       $view_v .= ' <input type="hidden" name="floor_num[]" value="'.$result['floor_num'] .'">';
       $view_v .= ' <input type="hidden" name="floor_height[]" value="'.$result['floor_height'] .'">';
-      // $view_v .= $select3; 
+      $view_v .= ' <input type="hidden" name="gr_name" value="'.$gr_name.'">';
+      $view_v .= $select3; 
       $view_v .= '</div>';
       
   }
@@ -139,7 +144,7 @@ else{
 
 
 // ５５．表一覧＿杭符号情報抽出
-$stmt = $pdo->prepare("select * from pillvirtispec where gen_name = :gen_name ORDER BY id DESC ");
+$stmt = $pdo->prepare("select * from pillvirtispec where gen_name = :gen_name ORDER BY id DESC");
 $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
 $status = $stmt->execute();
 
@@ -287,7 +292,7 @@ $view_vspec4 .= '</tr>';
 
 
 <div style="display: flex;justify-content:flex-start;">
-<form name="form2" action="pillvirtispec2.php" method="post" style="font-size:14px;">
+<form name="form2" action="pillvirtispec.php" method="post" style="font-size:14px;">
 <div style="display: flex;justify-content:flex-start;margin:5px;width:600px;">
 <p style="font-size:20px;margin:10px;">断面選択：</p>
 <?= $select ?>
