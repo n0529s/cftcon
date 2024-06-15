@@ -13,11 +13,14 @@ $gen_name = $_SESSION['gen_name'];
 $offset_st = $_POST["offset_st"];
 $offset_end = $_POST["offset_end"];
 
+$offsetX2 = intval($offsetX);
+$offsetY2 = intval($offsetY);
+var_dump($offsetX);
+var_dump($offsetY);
 
-var_dump($gen_name);
-var_dump($pill_sign);
-var_dump($gen_name);
-var_dump($offset_st);
+$offsetXX = $offsetX/1000;
+$offsetYY = $offsetY/1000;
+var_dump($offsetXX);
 
 
 
@@ -33,6 +36,8 @@ $pdo = db_conn();
 $stmt = $pdo->prepare("select * from pillvirtispec where pill_sign = :pill_sign");
 $stmt->bindValue(':pill_sign', $pill_sign, PDO::PARAM_STR);
 $status = $stmt->execute();
+
+$virtilength3 = 0;
 
 if($status==false) {
   //execute（SQL実行時にエラーがある場合）
@@ -59,7 +64,7 @@ if($offset_st =="" && $offset_end =="" ){
   $virtilength4 = $virtilength3 - $offset_st + $offset_end;
 }
 
-var_dump($virtilenght3);
+// var_dump($virtilenght3);
 
 //３.１ 座標情報抽出X
 $stmt = $pdo->prepare("select * from stcore where stcore_num = :stcore_numX");
@@ -75,7 +80,11 @@ else{
 //Selectデータの数だけ自動でループしてくれる
 //FETCH_ASSOC=http://php.net/manual/ja/pdostatement.fetch.php
   while( $result = $stmt->fetch(PDO::FETCH_ASSOC)){ 
+    if($offsetX =0){
       $coordX = ($result['coord']);
+    }else
+      $coordXX = floatval($result['coord']);
+      $coordX = $coordXX+$offsetXX;
 }
 }
 
@@ -95,7 +104,11 @@ else{
 //Selectデータの数だけ自動でループしてくれる
 //FETCH_ASSOC=http://php.net/manual/ja/pdostatement.fetch.php
   while( $result = $stmt->fetch(PDO::FETCH_ASSOC)){ 
+    if($offsetY =0){
       $coordY = ($result['coord']);
+    }else
+      $coordYY = floatval($result['coord']);
+      $coordY = $coordYY+$offsetYY;
 }
 }
 
@@ -124,8 +137,8 @@ $stmt->bindValue(':stcore_numX', $stcore_numX, PDO::PARAM_STR);  //Integer（数
 $stmt->bindValue(':stcore_numY', $stcore_numY, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 $stmt->bindValue(':coordX', $coordX, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 $stmt->bindValue(':coordY', $coordY, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
-$stmt->bindValue(':offsetX', $offsetX, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
-$stmt->bindValue(':offsetY', $offsetY, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+$stmt->bindValue(':offsetX', $offsetX2, PDO::PARAM_INT);  //Integer（数値の場合 PDO::PARAM_INT)
+$stmt->bindValue(':offsetY', $offsetY2, PDO::PARAM_INT);  //Integer（数値の場合 PDO::PARAM_INT)
 
 // 5. 実行
 $status = $stmt->execute();

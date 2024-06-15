@@ -82,28 +82,28 @@ else{
     $select .= '</select>';
     }
 
-// // ２．選択した断面抽出
-// $pillcrossnum_a= array();
+// ２．選択した断面抽出
+$pillcrossnum_a= array();
 
-// $stmt = $pdo->prepare("SELECT * from pillvirtispec WHERE pill_sign = :pill_sign");
-// $stmt->bindValue(':pill_sign', $pill_sign, PDO::PARAM_STR);
-// $status22 = $stmt->execute();
-// if($status22==false) {
-//   //execute（SQL実行時にエラーがある場合）
-//   $error = $stmt->errorInfo();
-//   exit("ErrorQuery:".$error[2]);
-// }
-// else{
-// //Selectデータの数だけ自動でループしてくれる
-// //FETCH_ASSOC=http://php.net/manual/ja/pdostatement.fetch.php
-//   while( $result22 = $stmt->fetch(PDO::FETCH_ASSOC)){      
-// //選択した断面を抽出 
-//           $pillcrossnum_a[] = $result22['pill_crossnum'];
-//         }
+$stmt = $pdo->prepare("SELECT * from pillvirtispec WHERE pill_sign = :pill_sign");
+$stmt->bindValue(':pill_sign', $pill_sign, PDO::PARAM_STR);
+$status22 = $stmt->execute();
+if($status22==false) {
+  //execute（SQL実行時にエラーがある場合）
+  $error = $stmt->errorInfo();
+  exit("ErrorQuery:".$error[2]);
+}
+else{
+//Selectデータの数だけ自動でループしてくれる
+//FETCH_ASSOC=http://php.net/manual/ja/pdostatement.fetch.php
+  while( $result22 = $stmt->fetch(PDO::FETCH_ASSOC)){      
+//選択した断面を抽出 
+          $pillcrossnum_a[] = $result22['pill_crossnum'];
+        }
         
-//       }
+      }
 
-// var_dump($pillcrossnum_a);
+var_dump($pillcrossnum_a);
 
 
 
@@ -164,9 +164,12 @@ else{
       $view_v .= '<p style="margin:10px;">' . $result['floor_num'] . '</p>';
       $view_v .= ' <input type="hidden" name="floor_num[]" value="'.$result['floor_num'] .'">';
       $view_v .= ' <input type="hidden" name="floor_height[]" value="'.$result['floor_height'] .'">';
-      // select文生成
 
 
+
+
+
+      
       $view_v .= $select3; 
       $view_v .= '</div>';
       
@@ -323,7 +326,7 @@ $view_vspec4 .= '</tr>';
 
 
 <div style="display: flex;justify-content:flex-start;">
-<form name="form2" action="pillvirtispec.php" method="post" style="font-size:14px;">
+<form name="form2" action="pillvirtispec_ss.php" method="post" style="font-size:14px;">
 <div style="display: flex;justify-content:flex-start;margin:5px;width:600px;">
 <p style="font-size:20px;margin:10px;">断面選択：</p>
 <?= $select ?>

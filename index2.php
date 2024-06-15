@@ -24,16 +24,10 @@
 
 
 <body>
-  <!-- この中に記述していく -->
-  <!-- ここから下にコードを書く -->
-<div class="header">
-<!-- ロゴマーク表示 -->
-  <img class="rog" src="./img/header.png" alt="">
 
 <!-- メニュー表示 -->
-  <div class="menu">
-   <button type="button">設定</button>
-   <button type="button">柱選択</button>
+  <div class="menu" style='display:flex;align-items: flex-end;'>
+   <button type="button">柱選択変更</button>
    <a href="https://d28000001pumpeaw.my.salesforce-sites.com/" target="_blank">
    <button type="button">配車状況</button>
   </a>
@@ -81,22 +75,7 @@
 
 
 
- <!-- 受入検査 -->
- <h1 class="car">受入検査</h1>
- <form class="in" action="#" method="post">
-  フロー値  <input type="text"> mm<br>
-  
-  空気量<input type="text"> %<br>
 
-  塩化物含有量<input type="text"><br> 
- 
-  <input type="submit" value="送信"><br>
-
-  
-
-
-  <!-- 施工状況 -->
-  <h1 class="car">施工状況</h1>
 
 
 

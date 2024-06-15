@@ -60,8 +60,9 @@ if($status2==false) {
   $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
   $status = $stmt->execute();
   
-  
-  
+  $view_x ="";
+  $view_y ="";
+
   if($status==false) {
     //execute（SQL実行時にエラーがある場合）
     $error = $stmt->errorInfo();
@@ -210,8 +211,9 @@ $shape_pillx= $Ref_x-20;
 
 $shape_pill ="";
 $view_pillnum ="";
+$view_pillsign ="";
 
-
+ 
 if($status==false) {
   //execute（SQL実行時にエラーがある場合）
   $error = $stmt->errorInfo();
@@ -262,7 +264,7 @@ else{
    }
   }
   
-var_dump($shape_pillx3);
+// var_dump($shape_pillx3);
 
 
 ?>
@@ -313,20 +315,22 @@ var_dump($shape_pillx3);
  <p style="font-size:20px;margin:10px;">通り芯 X軸：</p>
  <?= $select_x ?>
  <p style="font-size:20px;margin:10px;">　X軸offset：</p>
- <input type="text" name="offsetX" style="margin:10px;Width:100px;"/>
+ <input type="number" name="offsetX" style="margin:10px;Width:100px;"/>
+ <p style="font-size:20px;margin:10px;">ｍｍ</p>
  </div>
 
  <div style="display: flex; justify-content:flex-start;margin:5px;">
  <p style="font-size:20px;margin:10px;">通り芯 Y軸：</p>
  <?= $select_y ?>
  <p style="font-size:20px;margin:10px;">　Y軸offset：</p>
- <input type="text" name="offsetY" style="margin:10px;Width:100px;"/>
+ <input type="number" name="offsetY" style="margin:10px;Width:100px;"/>
+ <p style="font-size:20px;margin:10px;">ｍｍ</p>
  </div>
 
  <div style="display: flex; justify-content:flex-start;margin:5px;">
- <p style="font-size:18px;margin:10px;">開始位置offset：</p>
+ <p style="font-size:18px;margin:10px;">打設開始高offset：</p>
  <input type="text" name="offset_st" style="margin:10px;Width:90px;"/>
- <p style="font-size:18px;margin:10px;">終了位置offset：</p>
+ <p style="font-size:18px;margin:10px;">終了高offset：</p>
  <input type="text" name="offset_end" style="margin:10px;Width:90px;"/>
  
  </div>

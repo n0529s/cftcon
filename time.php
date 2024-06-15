@@ -77,9 +77,9 @@ $status = $stmt->execute();
 
 $kaidaka = "";
 $rgtime = "";
+$rgtime3 = null;
 
 
-$rgtime3 = "";
 
 if($status==false) {
   //execute（SQL実行時にエラーがある場合）
@@ -93,21 +93,14 @@ else{
     $kaidaka .=$result["floor_num"].',';
  
 
-    $rgtime2 = $result["rgtime"] -$rgtime3;
+    $rgtime2 = strtotime($result["rgtime"])- $rgtime3;
     $rgtime3 = $rgtime2;
 
-    $rgtime .=$result["rgtime"].',';
+    $kaidaka .=$rgtime2.',';
   }
 }
 
-
-
-var_dump($rgtime2);
-
-
-
-
-
+var_dump($kaidaka);
 
 
 
@@ -123,6 +116,8 @@ var_dump($rgtime2);
 <meta name="viewport" content="width=device-width">
 <link rel="stylesheet" href="css/main.css" />
 <link href="css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/sample.css">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
 <style>div{padding: 10px;font-size:16px;}</style>
 <title>打上高さ管理</title>
@@ -155,15 +150,49 @@ var_dump($rgtime2);
 <p style="font-size:16px; margin:3px;">柱長：<?= $virtilength ?></p>
 </div>
 
-<form name="form1" action="time_act.php" method="post" style="font-size:14px;width:800px;">
+
+<div style="display: flex; justify-content:flex-start;margin:5px;width:800px;">
+<form name="form1" action="time_act.php" method="post" style="font-size:14px;">
 <div style="display: flex; justify-content:flex-start;margin:5px;">
  <p style="font-size:20px;margin:10px;width:150px;">打設開始：</p>
  <input type="hidden" name="gen_name" value="<?= $gen_name ?>"/>
  <input type="hidden" name="pill_num" value="<?= $pill_num ?>"/>
  <input type="hidden" name="floor_num" value="打設開始"/>
- <input style="margin:10px;" type="submit" value="打設　開始" />
+ <input style="margin:10px;" type="submit" onclick="disabled = true" value="打設　開始" />
  </div>
-</form>
+ </form>
+
+ <form name="form1" action="time_aa.php" method="post" style="font-size:14px;">
+<div style="display: flex; justify-content:flex-start;margin:5px;">
+ <input type="hidden" name="gen_name" value="<?= $gen_name ?>"/>
+ <input type="hidden" name="pill_num" value="<?= $pill_num ?>"/>
+ <input type="hidden" name="floor_num" value="打設開始"/>
+ <input style="margin:10px;" type="submit" name="リセット" value="リセット" />
+ </div>
+ </form>
+
+ </div>
+
+
+
+
+
+
+ 
+ <form name="form1" action="time_act.php" method="post" style="font-size:14px;width:800px;">
+ <div style="display: flex; justify-content:flex-start;margin:5px;">
+    <p style="font-size:20px;margin:10px;width:150px;">一時停止：</p>
+    <input type="hidden" name="gen_name" value="<?= $gen_name ?>"/>
+    <input type="hidden" name="pill_num" value="<?= $pill_num ?>"/> 
+    <input type="hidden" name="floor_num" value="一時停止"/>
+    <div class="toggle">
+      <input type="checkbox" value="一時　停止" name="check"/>
+    </div>
+ </div>
+ </form>
+
+
+
 
  <?= $button ?>
 
@@ -241,7 +270,27 @@ var_dump($rgtime2);
             },
           }
         });
+
+// トグルスイッチのJQuery
+
+  $(".toggle").on("click", function() {
+  $(".toggle").toggleClass("checked");
+  if(!$('input[name="check"]').prop("checked")) {
+    $(".toggle input").prop("checked", true);
+  } else {
+    $(".toggle input").prop("checked", false);
+  }
+});
+
+
+
+
   </script>
+
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js"> -->
+
+
+<!-- </script> -->
 
 
 

@@ -4,34 +4,31 @@
 session_start();
 $userid = $_SESSION['userid'];
 $username = $_SESSION['username'];
+$gen_name = $_SESSION['gen_name'];
 
-$genid = $_POST["gen"];
-// if($genid = ""){
-//   $genid = $_SESSION['username'];
+
+
+
+
+// require_once('funcs.php');
+// //ログインチェック
+// // loginCheck();
+// $pdo = db_conn();
+
+// // 現場経歴一覧取得_emp_idで抽出
+// $stmt = $pdo->prepare("select * from gen where id=$genid");
+// // $stmt->bindValue();
+// $status = $stmt->execute();
+
+// //4．データ表示
+// if ($status == false) {
+//     sql_error($status);
+// } else {
+//     $result = $stmt->fetch();//ここを追記！！
 // }
 
-
-
-
-require_once('funcs.php');
-//ログインチェック
-// loginCheck();
-$pdo = db_conn();
-
-// 現場経歴一覧取得_emp_idで抽出
-$stmt = $pdo->prepare("select * from gen where id=$genid");
-// $stmt->bindValue();
-$status = $stmt->execute();
-
-//4．データ表示
-if ($status == false) {
-    sql_error($status);
-} else {
-    $result = $stmt->fetch();//ここを追記！！
-}
-
-$gen_name = $result["gen_name"];
-$_SESSION["gen_name"] = $gen_name;
+// $gen_name = $result["gen_name"];
+// $_SESSION["gen_name"] = $gen_name;
 
 ?>
 

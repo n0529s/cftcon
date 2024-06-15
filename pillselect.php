@@ -86,7 +86,8 @@ if($status2==false) {
   $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
   $status = $stmt->execute();
   
-  
+  $view_x ="";
+  $view_y ="";
   
   if($status==false) {
     //execute（SQL実行時にエラーがある場合）
@@ -193,14 +194,17 @@ $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
 $status = $stmt->execute();
 
 // var_dump($status);
+// 柱寸法指定（3倍）
+$view_pillsizeX = 3*$Yrate;
+// 表示位置
+$shape_pilly= $Ref_y-$view_pillsizeX/2+10;
+$shape_pillx= $Ref_x-$view_pillsizeX/2-10;
 
 
-$shape_pilly= $Ref_y;
-$shape_pillx= $Ref_x-20;
 
 $shape_pill ="";
 $view_pillnum ="";
-
+$view_pillsign =""; 
 
 if($status==false) {
   //execute（SQL実行時にエラーがある場合）
@@ -228,7 +232,7 @@ else{
       $shape_pill .= 'ctx.rect(';
       $shape_pill .= $shape_pillx3.',';
       $shape_pill .= $shape_pilly3.',';
-      $shape_pill .= '20,20);';
+      $shape_pill .= $view_pillsizeX.','.$view_pillsizeX.');';
 
      //柱番号抽出 
       $shape_pillnum = $result['pill_num'];

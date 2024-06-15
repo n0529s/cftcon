@@ -74,48 +74,25 @@ $select .= '</select> <br>';
 <p style="height:100px;"></p>
 
 <p style="font-size:20px;">現場名：<?= $gen_name ?></p>
-<h3>設計設定</h3>
+<h3>施工管理設定</h3>
 
-<form name="form1" action="core.php" method="post" style="font-size:14px;">
+<form name="form1" action="constandard.php" method="post" style="font-size:14px;">
 <div style="display: flex; justify-content:space-around;margin:10px;width:400px;">
- <p style="font-size:20px;">①通り芯設定</p>
+ <p style="font-size:20px;width:250px;">①受入検査基準値設定</p>
  <input stile="margin:10px;" type="submit" value="入力へ" />
  </div>
  </form>
 
  <form name="form1" action="floor.php" method="post" style="font-size:14px;">
  <div style="display: flex; justify-content:space-around;margin:10px;width:400px;">
- <p style="font-size:20px;">②フロア設定</p>
+ <p style="font-size:20px;width:250px">②Con仕様・プラント設定</p>
  <input stile="margin:10px;" type="submit" value="入力へ" />
  </div>
  </form>
 
- <form name="form1" action="pillvirtispec.php" method="post" style="font-size:14px;">
- <div style="display: flex; justify-content:space-around;margin:10px;width:400px;">
- <p style="font-size:20px;">③柱符号設定</p>
- <input stile="margin:10px;" type="submit" value="入力へ" />
- </div>
- </form>
-
- <form name="form1" action="pill.php" method="post" style="font-size:14px;">
-<div style="display: flex; justify-content:space-around;margin:10px;width:400px;">
- <p style="font-size:20px;">④柱設定　　</p>
- <input style="margin:10px;" type="submit" value="入力へ" />
- </div>
- </form>
-
- <form name="form1" action="crossspec.php" method="post" style="font-size:14px;">
-<div style="display: flex; justify-content:space-around;margin:10px;width:400px;">
-
- <p style="font-size:20px;">⑤柱断面設定</p>
- <input stile="margin:10px;" type="submit" value="入力へ" />
- </div>
- </form>
 
  
  <input type="button" onclick="location.href='./menu2.php'" value="メニュー画面へ" style='coler:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:10px;'>
-
-
 
 
 

@@ -1,101 +1,62 @@
-body {
-  margin: 0;
-  padding: 0;
-  text-align: left;
-  font-size: 32px;
-  width: 100%;
-}
-header {
-  background-color: #fff;
-  border-bottom: 1px solid #ccc;
-  text-align: center;
-}
-h1 {
-  font-size: 60%;
-  margin-bottom: 0;
-  text-align: center;
-}
-h2 {
-  font-size: 60%;
-  text-align: center;
-  margin-bottom: 0;
-}
 
 
-main {
-   width: 96%;
-  display: block;
-  border-bottom: 1px solid #ccc;
-  position: relative; 
-}
-footer {
-  background-color: #fff;
-  border-bottom: 1px solid #ccc;
-  text-align: center;
-}
-p {
-  font-size: 200%;
-  text-align: center;
-  border-bottom: 1px solid #fff;
-  height: 200px;
-}
-ul {
-  padding: 0;
-  border-top: 1px solid #000000;
-  display: table; /* 定義 */
-  table-layout: fixed;
-  width: 96%;
-  font-size: 60%;
-  margin: 0 3%;
-  text-align: center;
-}
-li {
-  list-style-type: none;
-  border: 1px solid #666;
-  background-color: #fff;
-  display: table-cell; /* 定義 */
+/* ここからトグルスイッチ */
+
+.toggle {
+  position: relative;
+  width: 98px;
+  height: 38px;
+  margin: 5px 10px;
+  border-radius: 50px;
+  overflow: hidden;
   cursor: pointer;
-  color: #0d7dfd;
-  margin: center;
 }
-li:hover {
-  background: #0d7dfd;
-  color: #fff;
+.toggle input[type=checkbox] {
+  display: none;
 }
-textarea {
-  margin: 10px 3%;
-  width: 95%;
-  height: 40px;
-  font-size: 80%;
-  box-shadow: 3px 3px 3px 3px #555;
-  background-color: rgb(241, 239, 239);
+.toggle:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #7cd7f3;
+  -webkit-transition: 0.2s ease-out;
+  transition: 0.2s ease-out;
 }
-#key {
-  margin: 0 3%;
-  width: 95%;
-  font-size: 80%;
-  background-color: #e1efff;
-  box-shadow: 3px 3px 3px 3px #555;
+.toggle:after {
+  content: "OFF";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 32px;
+  height: 32px;
+  display: block;
+  border-radius: 50px;
+  background: #fff;
+  box-shadow: 0 9px 28px -6px rgba(0, 0, 0, 0.3);
+  -webkit-transition: 0.2s ease-out;
+  transition: 0.2s ease-out;
+  text-align: center;
+  padding: 10px 0 0;
+  line-height: 1;
+  font-size: 12px;
+  font-weight: bold;
+  color: #4394df;
+  letter-spacing: .5px;
+  box-sizing: border-box;
 }
-table {
-  margin: 20px 3%;
-  border: 1px solid #8dc3f5;
-  width: 96%;
+.toggle.checked:before {
+  background: #f8268f;
 }
-th {
-  width: 20%;
-  font-size: 18px;
-  background-color: #d0e7fc;
-  border-bottom: 1px solid #8dc3f5;
+.toggle.checked:after {
+  content: "ON";
+  left: 63px;
+  box-shadow: 0 9px 28px -6px rgba(0, 0, 0, 0.5);
+  color: #fc0d0d;
+  padding: 12px 0 0 1px;
 }
-td {
-  font-size: 18px;
-  background-color: rgb(241, 239, 239);
-  border-bottom: 1px solid #8dc3f5;
-}
-input {
-  margin: 10px 3%;
-  width: 15%;
-  height: 25px;
-  font-size: 80%;
-}
+
+/* ここまでトグルスイッチ */
