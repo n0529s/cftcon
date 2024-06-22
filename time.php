@@ -61,7 +61,10 @@ else{
     $button .='<input type="hidden" name="gen_name" value="'.$gen_name.'"/>';
     $button .='<input type="hidden" name="pill_num" value="'.$pill_num.'"/>';
     $button .='<input type="hidden" name="floor_num" value="'.$result["floor_num"].'"/>';
-    $button .=' <input style="margin:10px;" type="submit" value="'.$result['floor_num'].'打設完了"/>';
+    $button .=' <input style="margin:10px;" type="submit" id="'.$result['floor_num'].'"' .'value="'.$result['floor_num'].'打設完了"/>';
+
+    $button .='<div style="font-size:20px;margin-left:30px;" id="time'.$result['floor_num'];
+    $button .='">00:00.000</div>';
     $button .='</div></form>';
 // onclick="disabled = true;"1クリックで押せなくなる
   }
@@ -140,6 +143,20 @@ var_dump($kaidaka);
 <p style="height:100px;"></p>
 
 <p style="font-size:20px;">現場名：<?= $gen_name ?></p>
+
+<h1>Stopwatch⌚️</h1>
+  <div id="container">
+    <div id="time">00:00.000</div>
+    <div id="buttons">
+      <input id="start2" type="button" value="start">
+      <input id="stop" type="button" value="stop">
+      <input id="reset" type="button" value="reset">
+    </div>
+  </div>  
+  <!-- <script src='main.js'></script> -->
+
+
+
 <h3>打上り高さ管理</h3>
 <div style="display: flex; justify-content:space-around;margin:5px;width:300px;">
 <p style="font-size:16px; margin:3px;">杭番号：<?= $pill_num ?></p>
@@ -158,7 +175,7 @@ var_dump($kaidaka);
  <input type="hidden" name="gen_name" value="<?= $gen_name ?>"/>
  <input type="hidden" name="pill_num" value="<?= $pill_num ?>"/>
  <input type="hidden" name="floor_num" value="打設開始"/>
- <input style="margin:10px;" type="submit" onclick="disabled = true" value="打設　開始" />
+ <input style="margin:10px;" id="start" type="submit" onclick="disabled = true" value="打設　開始" />
  </div>
  </form>
 
@@ -172,12 +189,6 @@ var_dump($kaidaka);
  </form>
 
  </div>
-
-
-
-
-
-
  
  <form name="form1" action="time_act.php" method="post" style="font-size:14px;width:800px;">
  <div style="display: flex; justify-content:flex-start;margin:5px;">
@@ -225,10 +236,10 @@ var_dump($kaidaka);
       window.onload = function() {
           init();
       };
-</script>
+
 
 <!-- グラフ表示設定 -->
-<script>
+
         var ctx = document.getElementById("chart");
         var myLineChart = new Chart(ctx, {
           // グラフの種類：折れ線グラフを指定
@@ -283,7 +294,97 @@ var_dump($kaidaka);
 });
 
 
+// ストップウオッチのJS
+const time = document.getElementById('time1F');
 
+const startButton = document.getElementById('start');
+// const startButton2 = document.getElementById('1F');
+// const startButton3 = document.getElementById('2F');
+const stopButton = document.getElementById('1F');
+const stopButton2 = document.getElementById('2F');
+const stopButton3 = document.getElementById('3F');
+const resetButton = document.getElementById('reset');
+
+// 開始時間
+let startTime;
+// 停止時間
+let stopTime = 0;
+// タイムアウトID
+let timeoutID;
+
+// 時間を表示する関数
+function displayTime() {
+  const currentTime = new Date(Date.now() - startTime + stopTime);
+  const h = String(currentTime.getHours()-1).padStart(2, '0');
+  const m = String(currentTime.getMinutes()).padStart(2, '0');
+  const s = String(currentTime.getSeconds()).padStart(2, '0');
+  const ms = String(currentTime.getMilliseconds()).padStart(3, '0');
+
+  time.textContent = `経過時間：${m}:${s}`;
+  timeoutID = setTimeout(displayTime, 10);
+}
+
+// スタートボタンがクリックされたら時間を進める
+startButton.addEventListener('click', () => {
+  startButton.disabled = true;
+  stopButton.disabled = false;
+  resetButton.disabled = true;
+  startTime = Date.now();
+  displayTime();
+});
+
+startButton2.addEventListener('click', () => {
+  startButton.disabled = true;
+  stopButton.disabled = false;
+  resetButton.disabled = true;
+  startTime = Date.now();
+  displayTime();
+});
+
+startButton3.addEventListener('click', () => {
+  startButton.disabled = true;
+  stopButton.disabled = false;
+  resetButton.disabled = true;
+  startTime = Date.now();
+  displayTime();
+});
+
+// ストップボタンがクリックされたら時間を止める
+stopButton.addEventListener('click', function() {
+  startButton.disabled = false;
+  stopButton.disabled = true;
+  resetButton.disabled = false;
+  clearTimeout(timeoutID);
+  stopTime += (Date.now() - startTime);
+});
+
+stopButton2.addEventListener('click', function() {
+  startButton.disabled = false;
+  stopButton.disabled = true;
+  resetButton.disabled = false;
+  clearTimeout(timeoutID);
+  stopTime += (Date.now() - startTime);
+});
+
+stopButton3.addEventListener('click', function() {
+  startButton.disabled = false;
+
+  stopButton.disabled = true;
+  resetButton.disabled = false;
+  clearTimeout(timeoutID);
+  stopTime += (Date.now() - startTime);
+});
+
+// リセットボタンがクリックされたら時間を0に戻す
+resetButton.addEventListener('click', function() {
+  startButton.disabled = false;
+  stopButton.disabled = true;
+  resetButton.disabled = true;
+  time.textContent = '00:00.000';
+  stopTime = 0;
+});
+
+// ストップウオッチのJSここまで
 
   </script>
 
