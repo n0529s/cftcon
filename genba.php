@@ -73,7 +73,7 @@ $select .= '</select> <br>';
 
 <!-- lLOGINogin_act.php は認証処理用のPHPです。 -->
 <form name="form1" action="menu.php" method="post" style="font-size:14px;">
-<h3>現場選択</h3>
+<h3 style="margin-left:10px;">現場選択</h3>
 <div style="display: flex; justify-content:space-between;margin:10px;width:600px;">
  <p>◆現場選択：</p> <?= $select ?><br>
  <input style="coler:white; border-color:#3b82f6;color:white; font-size:18px;margin-right:30px;padding:10px 20px; background:#8EA9DB; border-radius:10px;" type="submit" value="メニュー画面へ" />
@@ -84,7 +84,7 @@ $select .= '</select> <br>';
  </form>
 
 
- <form name="form1" action="genba_act.php" method="post" style="font-size:14px;">
+ <form name="form1" action="genba_act.php" method="post" style="font-size:14px; margin-left:10px;">
 <h3>◆新規現場登録</h3><br>
 <div>
  　現 場 名  ：　　<input type="text" name="gen_name"><br>

@@ -20,8 +20,9 @@
 
 
 <p style="height:100px;"></p>
-<h2>ログインフォーム</h2>
+<h2 style="margin-left:10px;">ログインフォーム</h2>
 <!-- lLOGINogin_act.php は認証処理用のPHPです。 -->
+ <div style="margin-left:10px;">
 <form name="form1" action="login_act.php" method="post">
 ＩＤ：　<input type="text" name="userid" /><br>
 <p></p>
@@ -31,7 +32,7 @@
 
 
 </form>
-
+</div>
 
 </body>
 </html>

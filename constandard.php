@@ -160,7 +160,7 @@ if($status==false) {
 <h3>受入検査基準設定</h3>
 
 <form name="form1" action="core_act.php" method="post" style="font-size:14px;">
-<div style="margin:10px;width:400px;">
+<div style="margin:10px;width:600px;">
  <p style="font-size:18px;width:100px">コンクリートの種類</p>
  <select name="axle" style='coler:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:3px;width:60px;'>
      <option value="F">普通コンクリート</option>
@@ -169,23 +169,21 @@ if($status==false) {
      
  <p style="font-size:18px;width:100px">フロー値</p>
  <select name="axle" style='coler:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:3px;width:60px;'>
-     <option value="F">45</option>
-     <option value="H">50</option>
-     <option value="F">55</option>
-     <option value="H">60</option>
+     <option value="45">45</option>
+     <option value="50">50</option>
+     <option value="55">55</option>
+     <option value="60">60</option>
      </select><br>
 
-
- 通り芯名：　<input type="text" name="stcore_num" style="margin:10px;"/><br>
- <div>
- 芯間距離：　<input type="text" name="stcore_coordineate" style="margin:10px;"/>　mm<br>
-
-
-</div>
+<p style="margin:0px;">測定項目・管理基準値</p>
+ ◆スランプフロー：　　<input type="text" name="stcore_num" style="margin:10px; width:50px;"placeholder="60"/>cm ±<input type="text" name="stcore_num" style="margin:10px; width:50px;"placeholder="60"/>cm<br>
+ ◆コンクリート温度：　<input type="text" name="stcore_coordineate" style="margin:10px;width:50px;" placeholder="5"/>℃以上<input type="text" name="stcore_coordineate" style="margin:10px;width:50px;" placeholder="35"/>℃以下<br>
+ ◆空気量：　　　　　　<input type="text" name="stcore_num" style="margin:10px; width:50px;"placeholder="3.0"/>±<input type="text" name="stcore_num" style="margin:10px; width:50px;" placeholder="1.5"/>％<br>
+ ◆塩化物含有量：　　　<input type="text" name="stcore_num" style="margin:10px; width:50px;" placeholder="0.30"/>kg/m3以下　　　　
  <input stile="margin:10px;" type="submit" value="登録" />
  </div>
  </form>
-<p>X軸登録値</p>
+<p>X軸登録値</p> 
 <table style="font-size: 12px;width: 600px;">
  <?= $view_x ?>
 </table>

@@ -73,8 +73,8 @@ $_SESSION["gen_name"] = $gen_name;
 
 <!-- lLOGINogin_act.php は認証処理用のPHPです。 -->
 
-<h3>メニュー画面</h3>
- <p style="font-size:20px;">現場名：<?= $gen_name ?></p>
+<h3 style="margin-left:10px;">メニュー画面</h3>
+ <p style="font-size:20px; margin-left:10px;">現場名：<?= $gen_name ?></p>
 
 <div style="display: flex; justify-content:space-between; width:400px">
   <form name="form1" action="sekkei.php" method="post" style="font-size:14px;">
