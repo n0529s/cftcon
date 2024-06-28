@@ -98,7 +98,7 @@ $view_x .= '</tr>';
 <!-- <link rel="stylesheet" href="css/main.css" /> -->
 <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
 <style>div{padding: 10px;font-size:16px;}</style>
-<title>コンクリート管理値入力</title>
+<title>コンクリート仕様・プラント</title>
 </head>
 <body>
 
@@ -118,7 +118,7 @@ $view_x .= '</tr>';
 
 <p style="height:100px;"></p>
 <p style="font-size:20px;">現場名：<?= $gen_name ?></p>
-<h3>受入検査基準設定</h3>
+<h3>設計図書基準値</h3>
 <form name="form1" action="constandard_act.php" method="post">
 <div style="display: flex; justify-content:space-between; width:670px">
 
@@ -148,12 +148,28 @@ $view_x .= '</tr>';
 
          </div>  
 </div>
+<p style="margin:0px;font-size:18px;">■設計図書基準値</p>
+ ◆セメントの種類：　　<input id="Slump"  name="Slump" type="text" style="margin:10px; width:50px;" value="<?= $flow ?>"/>cm ±<input type="text" id="Span" name="Span" style="margin:10px; width:50px;"value="<?= $range ?>"/>cm<br>
+ ◆設計基準強度Fc：　<input id="tempmin" name="Tempmin" type="text" style="margin:10px;width:50px;" value="<?= $tempmin ?>"/>℃以上<input type="text" name="Tempmax" style="margin:10px;width:50px;" value="<?= $tempmax ?>"/>℃以下<br>
+ ◆スランプフロー：　　　　　　<input id="Air" name="Air" type="text" style="margin:10px; width:50px;" value="<?= $air ?>"/>±<input type="text" name="AirSpan" style="margin:10px; width:50px;" value="<?= $range2 ?>"/>％<br>
+ ◆目標空気量：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下<br>
+ ◆単位水量：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下<br>
+ ◆水結合材比：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下<br>
+ ◆塩化物含有量：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下<br>
+ ◆ブリーディング量：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下<br>
+ ◆沈降量：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下
+ <input style="margin:10px;" type="submit" value="登録" />
+ 
 
-<p style="margin:0px;">測定項目・管理基準値</p>
- ◆スランプフロー：　　<input id="Slump"  name="Slump" type="text" style="margin:10px; width:50px;" value="<?= $flow ?>"/>cm ±<input type="text" id="Span" name="Span" style="margin:10px; width:50px;"value="<?= $range ?>"/>cm<br>
- ◆コンクリート温度：　<input id="tempmin" name="Tempmin" type="text" style="margin:10px;width:50px;" value="<?= $tempmin ?>"/>℃以上<input type="text" name="Tempmax" style="margin:10px;width:50px;" value="<?= $tempmax ?>"/>℃以下<br>
- ◆空気量：　　　　　　<input id="Air" name="Air" type="text" style="margin:10px; width:50px;" value="<?= $air ?>"/>±<input type="text" name="AirSpan" style="margin:10px; width:50px;" value="<?= $range2 ?>"/>％<br>
- ◆塩化物含有量：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下　　　　
+<p style="margin:0px;font-size:18px;">■プラント設定基準値</p>
+ ◆プラント工場名：　　<input id="Slump"  name="Slump" type="text" style="margin:10px; width:50px;" value="<?= $flow ?>"/>cm ±<input type="text" id="Span" name="Span" style="margin:10px; width:50px;"value="<?= $range ?>"/>cm<br>
+ ◆プラント所在地：　<input id="tempmin" name="Tempmin" type="text" style="margin:10px;width:50px;" value="<?= $tempmin ?>"/>℃以上<input type="text" name="Tempmax" style="margin:10px;width:50px;" value="<?= $tempmax ?>"/>℃以下<br>
+ ◆想定運搬時間：　　　　　　<input id="Air" name="Air" type="text" style="margin:10px; width:50px;" value="<?= $air ?>"/>±<input type="text" name="AirSpan" style="margin:10px; width:50px;" value="<?= $range2 ?>"/>％<br>
+ ◆設計基準強度：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下　　　　
+ ◆スランプフロー：　　　　　　<input id="Air" name="Air" type="text" style="margin:10px; width:50px;" value="<?= $air ?>"/>±<input type="text" name="AirSpan" style="margin:10px; width:50px;" value="<?= $range2 ?>"/>％<br>
+ ◆単位セメント量：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下<br>
+ ◆単位水量：　　　　　　<input id="Air" name="Air" type="text" style="margin:10px; width:50px;" value="<?= $air ?>"/>±<input type="text" name="AirSpan" style="margin:10px; width:50px;" value="<?= $range2 ?>"/>％<br>
+ ◆水セメント比：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下<br>
  <input style="margin:10px;" type="submit" value="登録" />
  
 </form>

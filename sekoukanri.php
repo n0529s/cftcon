@@ -83,7 +83,7 @@ $select .= '</select> <br>';
  </div>
  </form>
 
- <form name="form1" action="floor.php" method="post" style="font-size:14px;">
+ <form name="form1" action="conmanege.php" method="post" style="font-size:14px;">
  <div style="display: flex; justify-content:space-around;margin:10px;width:400px;">
  <p style="font-size:20px;width:250px">②Con仕様・プラント設定</p>
  <input stile="margin:10px;" type="submit" value="入力へ" />
