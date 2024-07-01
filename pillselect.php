@@ -32,8 +32,8 @@ foreach ($stmt as $row2) {
 // 表示比率設定
 $Xrate = 1100/$max_X/2;
 $Yrate = 500/$max_Y;
-var_dump($Xrate);
-var_dump($Yrate);
+// var_dump($Xrate);
+// var_dump($Yrate);
 
 
 
@@ -188,6 +188,8 @@ else{
 }
 
 
+
+
 // ６．柱情報一覧表抽出/図示
 $stmt = $pdo->prepare("select * from design where gen_name = :gen_name");
 $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
@@ -203,8 +205,15 @@ $shape_pillx= $Ref_x-$view_pillsizeX/2-10;
 
 
 $shape_pill ="";
-$view_pillnum ="";
+$view_pillnum = "";
 $view_pillsign =""; 
+
+// クリック判定変数
+$pillnum222 = array();
+$pillx222 = array();
+$pilly222 = array();
+
+
 
 if($status==false) {
   //execute（SQL実行時にエラーがある場合）
@@ -222,11 +231,19 @@ else{
       $shape_pillx2 = $result['coordX']*$Xrate;
       $shape_pilly2 = $result['coordY']*$Yrate;
       $shape_pillx3 = $shape_pillx + $shape_pillx2;
+      // $shape_pillx3total .=$shape_pillx3;
       $shape_pilly3 = $shape_pilly - $shape_pilly2;
     // 柱番号用位置抽出
       $shape_pilly4 = $shape_pilly3 -3;
     // 柱符号用位置抽出
       $shape_pilly5 = $shape_pilly3 +33;
+
+    // クリックしたときの抽出座標
+      $pillnum222[] =$result['pill_num'];
+      $pillx222[] =$shape_pillx3;
+      $pilly222[] =$shape_pilly3;
+
+
     
      // 柱表示
       $shape_pill .= 'ctx.rect(';
@@ -244,8 +261,8 @@ else{
    }
   }
   
-var_dump($shape_pillx3);
-
+// var_dump($pillx222);
+// var_dump($result['coordX']);
 
 ?>
 
@@ -332,7 +349,7 @@ var_dump($shape_pillx3);
           <?= $view_pillsign ?>;
          ctx.stroke();
 
-        draw();
+        // draw();
 
         }
       
@@ -342,80 +359,83 @@ var_dump($shape_pillx3);
               init();
           }
 
-// マウスオーバーイベント！！！！
-var targetFlag = false; // trueでマウスが要素に乗っているとみなす
-var rect = null;
 
-/* Canvas上にマウスが乗った時 */
-function onMouseOver(e) {
-    rect = e.target.getBoundingClientRect();
-    canvas.addEventListener('mousemove', onMouseMove, false);
-}
-/* Canvasからマウスが離れた時 */
-function onMouseOut() {
-    canvas.removeEventListener('mousemove', onMouseMove, false);
-}
-/* Canvas上でマウスが動いている時 */
-function onMouseMove(e) {
-    /* マウスが動く度に要素上に乗っているかかどうかをチェック */
-    moveActions.updateTargetFlag(e);
+// マウスクリックで座標取得
 
-    /* 実行する関数には、間引きを噛ませる */
-    if (targetFlag) {
-        moveActions.throttle(moveActions.over, 50);
-    } else {
-        moveActions.throttle(moveActions.out, 50);
-    }
-}
+const canvas = document.getElementById('core');
+const ctx = canvas.getContext('2d'); // Canvasの2Dコンテキストを取得する
 
-/* mouseMoveで実行する関数 */
-var moveActions = {
-    timer: null,
-    /* targetFlagの更新 */
-    updateTargetFlag: function(e) {
-        var x = e.clientX - rect.left;
-        var y = e.clientY - rect.top;
+canvas.addEventListener('click', (e) => {
+  var rect = e.target.getBoundingClientRect();
+  var x = e.clientX - rect.left;
+  var y = e.clientY - rect.top;
+  console.log(`${x}:${y}`);
+  draw(x, y); // xとyを引数としてdraw()関数を呼び出す
 
-        /* 最後の50は、該当する要素の半サイズを想定 */
-        var a = (x > w / 2 - 50);
-        var b = (x < w / 2 + 50);
-        var c = (y > h / 2 - 50);
-        var d = (y < h / 2 + 50);
 
-        targetFlag = (a && b && c && d); // booleanを代入
-    },
-    /* 連続イベントの間引き */
-    throttle: function(targetFunc, time) {
-        var _time = time || 100;
-        clearTimeout(this.timer);
-        this.timer = setTimeout(function () {
-            targetFunc();
-        }, _time);
-    },
-    out: function() {
-        draw();
-    },
-    over: function() {
-        drawIsHover();
-    }
-};
+    // 設計柱情報受け取り(php→JS)
+    var pillnum222 = JSON.parse('<?php echo json_encode($pillnum222)?>');
+    var pillx222 = JSON.parse('<?php echo json_encode($pillx222)?>');
+    var pilly222 = JSON.parse('<?php echo json_encode($pilly222)?>');
+    // var xx =array();
+    // console.log(pillx222);
 
-function draw(color) {
-    // デフォルトもしくはマウスが要素から離れた時の描画処理
-}
-function drawIsHover() {
-    // マウスが要素に乗った時の描画処理
+
+
+// 要素の推定
+for (let i = 0; i < pillx222.length; i++) {
+   let xx = x - pillx222[i];
+   let yy = y - pilly222[i];
+   let total = Math.sqrt(xx * xx + yy * yy);
+   console.log(total);
 }
 
-canvas.addEventListener('mouseover', onMouseOver, false);
-canvas.addEventListener('mouseout', onMouseOut, false);
+// 最小値取得
+let min = Number.MAX_VALUE; // 初期値として最大の数値を設定する
+let index = -1;
 
-draw();
+for (let i = 0; i < pillx222.length; i++) {
+   let xx = x - pillx222[i];
+   let yy = y - pilly222[i];
+   let currentDistance = Math.sqrt(xx * xx + yy * yy);
+   
+   if (currentDistance < min) {
+      min = currentDistance;
+      if(min < 50){
+        index = i; // 最小値を持つ要素のインデックスを更新
+      }
+      
+   }
+}
 
+console.log("最小値:", min);
+console.log("最小値のインデックス:", index);
+
+var target = pillnum222[index];
+console.log("選択された柱番号:", target);
+// alert("選択された柱番号:" +target);
+
+var btn = document.getElementById('btn');
+
+var result = window.confirm("選択された柱番号:"+target +"これでよろしいですか？");
+
+console.log( result );
+
+    if(result) {
+            console.log('OKがクリックされました');
+            window.location.href = 'index2.php?id='+target;
+        }else{
+
+        }
+
+});
+
+function draw(x, y) {
+    // 描画処理
+    ctx.fillRect(x, y, 10, 10);
+}
 
 </script>
-
-
 
 
 </body>

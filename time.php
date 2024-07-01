@@ -61,7 +61,10 @@ else{
     $button .='<input type="hidden" name="gen_name" value="'.$gen_name.'"/>';
     $button .='<input type="hidden" name="pill_num" value="'.$pill_num.'"/>';
     $button .='<input type="hidden" name="floor_num" value="'.$result["floor_num"].'"/>';
-    $button .=' <input style="margin:10px;" type="submit" value="'.$result['floor_num'].'打設完了"/>';
+    $button .=' <input style="margin:10px;" type="submit" id="'.$result['floor_num'].'"' .'value="'.$result['floor_num'].'打設完了"disabled>';
+
+    $button .='<div style="font-size:20px;margin-left:30px;" id="time'.$result['floor_num'];
+    $button .='">00:00.000</div>';
     $button .='</div></form>';
 // onclick="disabled = true;"1クリックで押せなくなる
   }
@@ -128,7 +131,7 @@ var_dump($kaidaka);
   <nav class="navbar navbar-default" style="background:linear-gradient(to bottom, #8EA9DB 70%, #D9EAFF 100%); border-color:#305496;font-size:15px;display:flex;justify-content:space-between;">
     <div class="container-fluid"><p style="font-size: 20px;color:#E2EFDA;font-weight: bold;">CFTコンクリート施工管理システム</p></div>
     <div>
-      <a class="navbar-brand" href="genba.php">現場選択</a>
+      <a class="navbar-brand" href="index2.php">施工管理へ</a>
       <p>LoginID:<?= $userid ?></p>
   </div>
     </div>
@@ -140,6 +143,11 @@ var_dump($kaidaka);
 <p style="height:100px;"></p>
 
 <p style="font-size:20px;">現場名：<?= $gen_name ?></p>
+
+<div id="edit_area"></div>
+
+
+
 <h3>打上り高さ管理</h3>
 <div style="display: flex; justify-content:space-around;margin:5px;width:300px;">
 <p style="font-size:16px; margin:3px;">杭番号：<?= $pill_num ?></p>
@@ -277,7 +285,136 @@ var_dump($kaidaka);
 });
 
 
+// ストップウオッチのJS
+const time = document.getElementById('time1F');
+const time2 = document.getElementById('time2F');
+const time3 = document.getElementById('time3F');
 
+const startButton = document.getElementById('start');
+const startButton2 = document.getElementById('1F');
+const startButton3 = document.getElementById('2F');
+const stopButton = document.getElementById('1F');
+const stopButton2 = document.getElementById('2F');
+const stopButton3 = document.getElementById('3F');
+const resetButton = document.getElementById('reset');
+
+// 開始時間
+let startTime;
+let startTime2;
+let startTime3;
+
+// 停止時間
+let stopTime = 0;
+let stopTime2 = 0;
+let stopTime3 = 0;
+
+// タイムアウトID
+let timeoutID;
+
+// 時間を表示する関数
+function displayTime() {
+  const currentTime = new Date(Date.now() - startTime + stopTime);
+  const h = String(currentTime.getHours()-1).padStart(2, '0');
+  const m = String(currentTime.getMinutes()).padStart(2, '0');
+  const s = String(currentTime.getSeconds()).padStart(2, '0');
+  const ms = String(currentTime.getMilliseconds()).padStart(3, '0');
+  time.textContent = `経過時間：${m}:${s}`;
+  timeoutID = setTimeout(displayTime, 10);
+}
+
+function displayTime2() {
+  const currentTime2 = new Date(Date.now() - startTime2 + stopTime2);
+  const h2 = String(currentTime2.getHours()-1).padStart(2, '0');
+  const m2 = String(currentTime2.getMinutes()).padStart(2, '0');
+  const s2 = String(currentTime2.getSeconds()).padStart(2, '0');
+  const ms2 = String(currentTime2.getMilliseconds()).padStart(3, '0');
+  time2.textContent = `経過時間：${m2}:${s2}`;
+  timeoutID2 = setTimeout(displayTime2, 10);
+}
+
+function displayTime3() {
+  const currentTime3 = new Date(Date.now() - startTime3 + stopTime3);
+  const h3 = String(currentTime3.getHours()-1).padStart(2, '0');
+  const m3 = String(currentTime3.getMinutes()).padStart(2, '0');
+  const s3 = String(currentTime3.getSeconds()).padStart(2, '0');
+  const ms3 = String(currentTime3.getMilliseconds()).padStart(3, '0');
+  time3.textContent = `経過時間：${m3}:${s3}`;
+  timeoutID3 = setTimeout(displayTime3, 10);
+}
+
+// スタートボタンがクリックされたら時間を進める
+startButton.addEventListener('click', () => {
+  startButton.disabled = true;
+  stopButton.disabled = false;
+  resetButton.disabled = true;
+  startTime = Date.now();
+  displayTime();
+});
+
+startButton2.addEventListener('click', () => {
+  startButton2.disabled = true;
+  stopButton2.disabled = false;
+  resetButton.disabled = true;
+  startTime2 = Date.now();
+  displayTime2();
+});
+
+startButton3.addEventListener('click', () => {
+  startButton3.disabled = true;
+  stopButton3.disabled = false;
+  resetButton.disabled = true;
+  startTime3 = Date.now();
+  displayTime3();
+});
+
+// ストップボタンがクリックされたら時間を止める
+stopButton.addEventListener('click', function() {
+  stopButton2.disabled = false;
+  stopButton.disabled = true;
+  resetButton.disabled = false;
+  clearTimeout(timeoutID);
+  stopTime += (Date.now() - startTime);
+  document.getElementById('edit_area').innerHTML = stopTime ;
+});
+
+stopButton2.addEventListener('click', function() {
+  stopButton2.disabled = false;
+  stopButton2.disabled = true;
+  resetButton.disabled = false;
+  clearTimeout(timeoutID2);
+  stopTime2 += (Date.now() - startTime2);
+});
+
+stopButton3.addEventListener('click', function() {
+
+
+  stopButton3.disabled = true;
+  resetButton.disabled = false;
+  clearTimeout(timeoutID3);
+  stopTime3 += (Date.now() - startTime3);
+});
+
+// リセットボタンがクリックされたら時間を0に戻す
+resetButton.addEventListener('click', function() {
+  startButton.disabled = true;
+  startButton3.disabled = true;
+  stopButton.disabled = false;
+  resetButton.disabled = true;
+  clearTimeout(timeoutID2);
+  time2.textContent = '00:00.000';
+  stopTime = 0;
+  const currentTime = new Date(Date.now() - startTime + stopTime);
+  const h = String(currentTime.getHours()-1).padStart(2, '0');
+  const m = String(currentTime.getMinutes()).padStart(2, '0');
+  const s = String(currentTime.getSeconds()).padStart(2, '0');
+  const ms = String(currentTime.getMilliseconds()).padStart(3, '0');
+  time.textContent = `経過時間：${m}:${s}`;
+  timeoutID = setTimeout(displayTime, 10);
+  document.getElementById('edit_area').innerHTML = stopTime ;
+ 
+});
+
+// ストップウオッチのJSここまで
 
   </script>
 

@@ -1,3 +1,36 @@
+<?php
+
+//SESSIONスタート
+session_start();
+$userid = $_SESSION['userid'];
+$username = $_SESSION['username'];
+$gen_name = $_SESSION['gen_name'];
+
+$pill_num = $_GET["id"];
+$_SESSION["pill_num"] = $pill_num;
+
+
+require_once('funcs.php');
+//ログインチェック
+// loginCheck();
+$pdo = db_conn();
+
+// １．杭番号情報抽出
+$stmt = $pdo->prepare("select * from design where pill_num = :pill_num");
+$stmt->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);
+$status = $stmt->execute();
+foreach ($stmt as $row) {
+  $pill_sign =$row['pill_sign'];
+  $virtilength =$row['virtilength'];
+  $stcore_numX =$row['stcore_numX'];
+  $stcore_numY =$row['stcore_numY'];
+}
+
+
+?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -14,7 +47,7 @@
   <nav class="navbar navbar-default" style="background:linear-gradient(to bottom, #8EA9DB 70%, #D9EAFF 100%); border-color:#305496;font-size:15px;display:flex;justify-content:space-between;">
     <div class="container-fluid"><p style="font-size: 24px;color:#E2EFDA;font-weight: bold;">CFTコンクリート施工管理システム</p></div>
     <div>
-      <a class="navbar-brand" href="login.php">TOPページ</a>
+      <a  style="color:#FFFFFF;" href="pillselect.php">柱選択画面へ</a>
       <p>LoginID:<?= $userid ?></p>
   </div>
     </div>
@@ -22,8 +55,41 @@
 </header>
 
 
-
 <body>
+
+
+<p style="height:100px;"></p>
+<h3>施工管理画面</h3>
+<div style="display: flex; justify-content:flex-start;margin:5px;">
+    <div>
+        <p style="font-size:20px;">現場名：<?= $gen_name ?></p>
+        <p style="font-size:20px;">杭番号：<?= $pill_num ?></p>
+    </div>
+    <div>
+        <input type="button" onclick="location.href='./accept.php'" value="受入検査へ" style='coler:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:10px;width:120px;'>
+        <input type="button" onclick="location.href='./time.php'" value="打上高管理へ" style='coler:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:10px;'>
+    </div>
+</div>
+    <div style="display: flex; justify-content:space-around;margin:5px;width:300px;padding:0px;">
+        <p style="font-size:16px; margin:3px;">杭番号：<?= $pill_num ?></p>
+        <p style="font-size:16px; margin:3px;">杭符号：<?= $pill_sign ?></p>
+    </div>
+    <div style="display: flex; justify-content:space-around;margin:5px;width:300px;padding:0px;">
+        <p style="font-size:16px; margin:3px;">位置：<?=  $stcore_numX ?> － <?=  $stcore_numY ?></p>
+        <p style="font-size:16px; margin:3px;">柱長：<?= $virtilength ?></p>
+    </div>
+
+
+
+
+
+
+
+ <canvas id="core" width="1100" height="600"></canvas>
+
+
+
+
 
 <!-- メニュー表示 -->
   <div class="menu" style='display:flex;align-items: flex-end;'>
