@@ -1,90 +1,100 @@
 <?php
-
-//SESSIONスタート
+// SESSIONスタート
 session_start();
 $userid = $_SESSION['userid'];
 $username = $_SESSION['username'];
 $gen_name = $_SESSION['gen_name'];
 
-
 require_once('funcs.php');
-//ログインチェック
+// ログインチェック
 // loginCheck();
 $pdo = db_conn();
 
 // 登録情報検索
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM constmanege WHERE gen_name=:gen_name");
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM constmanege2 WHERE gen_name=:gen_name");
 $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
 $status = $stmt->execute();
+
 if ($status == false) {
   sql_error($status);
 } else {
-  $result = $stmt->fetch();//ここを追記！
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-$type = '';
-$strength = '';
+$status22 = $result["COUNT(*)"];
+$_SESSION["status22"] = $status22;
+var_dump($status22);
 
-$flow = '';
-$range = '0.0';
-$range2 = '1.5';
-$air = '3.0';
-$chlomax = 0.3;
-$tempmax = 35;
-$tempmin = 5;
+// 登録情報検索2
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM plant WHERE gen_name=:gen_name");
+$stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
+$status = $stmt->execute();
 
-$status = $result ["COUNT(*)"];
-$_SESSION["status"] = $status;
-
-
-if($result ["COUNT(*)"]!=0){
-$stmt2 = $pdo->prepare("SELECT * from constmanege where gen_name=:gen_name");
-$stmt2->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
-$status2 = $stmt2->execute();
-
-//4．データ表示
-if ($status2 == false) {
-  sql_error($status2);
+if ($status == false) {
+  sql_error($status);
 } else {
-  $result2 = $stmt2->fetch();//ここを追記！
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
 }
-$type = $result2 ["contype"];
-$strength = $result2 ["constrength"];
-$flow = $result2 ["conflow"];
-$range = ($result2 ["slumpmax"]-$result2 ["slumpmin"])/2;
-$range2 = ($result2 ["airmax"]-$result2 ["airmin"])/2;
-$air = $result2 ["airmax"]-$range2/2;
-$chlomax = $result2 ["chlomax"];
-$tempmax = $result2 ["contempmax"];
-$tempmin = $result2 ["contempmin"];
 
-};
+$status33 = $result["COUNT(*)"];
+$_SESSION["status33"] = $status22;
+var_dump($status33);
 
-// var_dump($range);
+
+
+
+
+
+
 
 // ４．データ表示
-$view_x = "<tr text-align='center' style='background: #BDD7EE;color:#833C0C;'><th width:14%;>種別</th><th  width:14%;>呼び強度</th><th width:14%;>フロー</th><th width:5%;>範囲</th><th width:14%;>空気量</th><th width:5%;>範囲</th><th width:14%;>塩化物</th><th width:10%;>Con温度Min</th><th width:10%;>Con温度MAX</th></tr>";
-$view_y = "<tr style='background: #BDD7EE;color:#833C0C'><th width:20%;>通り芯符号</th><th width:20%;>間隔</th><th width:20%;>修正</th><th width:20%;>削除</th></tr>";
+$view_x = "<tr text-align='center' style='background: #BDD7EE;color:#833C0C;'><th width='14%'>種類</th><th width='14%'>Fc強度</th><th width='14%'>フロー</th><th width='5%'>空気量</th><th width='14%'>単位水量</th><th width='5%'>水結合材比</th><th width='14%'>塩化物</th><th width='10%'>ﾌﾞﾘｰﾃﾞｨﾝｸﾞ量</th><th width='10%'>沈下量</th></tr>";
+$view_y = "<tr style='background: #BDD7EE;color:#833C0C'><th width='20%'>通り芯符号</th><th width='20%'>間隔</th><th width='20%'>修正</th><th width='20%'>削除</th></tr>";
+$type = "";
+$strength = "";
+$slump = "";
+$air = "";
+$water = "";
+$ww = "";
+$chlo = "";
+$bb = "";
+$sink = "";
 
-
-
-
-
-$view_x .= '<tr align="center"><td>'.$type.'</td>';
-$view_x .= '<td>'.$strength.'</td>';
-$view_x .= '<td>'.$flow.'</td>';
-$view_x .= '<td>±'.$range.'</td>';
-$view_x .= '<td>'.$air.'</td>';
-$view_x .= '<td>±'.$range2.'</td>';
-$view_x .= '<td>'.$chlomax.'以下</td>';
-$view_x .= '<td>'.$tempmin.'℃以上</td>';
-$view_x .= '<td>'.$tempmax.'℃以下</td>';
-$view_x .= '</tr>';
-
-// var_dump($id);
-
-
+if ($status22 != 0) {
+    $stmt2 = $pdo->prepare("SELECT * from constmanege2 where gen_name=:gen_name");
+    $stmt2->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
+    $status2 = $stmt2->execute();
+    
+    if ($status2 == false) {
+      sql_error($status2);
+    } else {
+      while ($result2 = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+        $type = $result2["design_contype"];
+        $strength = $result2["design_strength"];
+        $slump = $result2["design_slump"];
+        $air = $result2["design_air"];
+        $water = $result2["design_water"];
+        $ww = $result2["design_ww"];
+        $chlo = $result2["design_chlo"];
+        $bb = $result2["design_bb"];
+        $sink = $result2["design_sink"];
+        
+        // ４.２データ表示
+        $view_x .= '<tr align="center"><td>' . $type . '</td>';
+        $view_x .= '<td>' . $strength . '</td>';
+        $view_x .= '<td>' . $slump . '</td>';
+        $view_x .= '<td>' . $air . '</td>';
+        $view_x .= '<td>' . $water . '</td>';
+        $view_x .= '<td>' . $ww . '</td>';
+        $view_x .= '<td>' . $chlo . '以下</td>';
+        $view_x .= '<td>' . $bb . '℃以上</td>';
+        $view_x .= '<td>' . $sink . '℃以下</td>';
+        $view_x .= '</tr>';
+      }
+    }
+};
 ?>
+
 
 
 
@@ -102,7 +112,7 @@ $view_x .= '</tr>';
 </head>
 <body>
 
-<header style="position: fixed;width:100%;z-index: 9999;">
+<header style="position: fixed;width:100%;z-index: 9999;top: 0;left: 0;margin: 0;padding: 0;">
   <nav class="navbar navbar-default" style="background:linear-gradient(to bottom, #8EA9DB 70%, #D9EAFF 100%); border-color:#305496;font-size:15px;display:flex;justify-content:space-between;">
     <div class="container-fluid"><p style="font-size: 20px;color:#E2EFDA;font-weight: bold;">CFTコンクリート施工管理システム</p></div>
     <div>
@@ -116,69 +126,48 @@ $view_x .= '</tr>';
 </header>
 
 
-<p style="height:100px;"></p>
+<p style="height:60px;"></p>
 <p style="font-size:20px;">現場名：<?= $gen_name ?></p>
-<h3>設計図書基準値</h3>
-<form name="form1" action="constandard_act.php" method="post">
-<div style="display: flex; justify-content:space-between; width:670px">
-
-     <div style="display: flex; justify-content:center; margin:10px;width:270px;">  
-        <p style="font-size:16px;width:100px margin:0px; padding:0px;">ｺﾝｸﾘｰﾄ種類：</p>
-        <select id="Type" name="Type" style='color:white; border-color:#3b82f6;color:white; font-size:14px;margin:10px; background:#8EA9DB; border-radius:3px;width:100px; height:30px;'>
-          <option value="N">－</option>
-          <option value="F">普通コンクリート</option>
-          <option value="H">高強度コンクリート</option>
-          </select>
-     </div> 
-        
-        <div style="display: flex; justify-content:center; margin:10px;width:200px;">  
-          <p style="font-size:16px;width:100px margin:0px; padding:0px;">呼び強度：</p>
-          
-          <select id="Strength" name="Strength" style='color:white; border-color:#3b82f6;color:white; font-size:14px;margin:10px; background:#8EA9DB; border-radius:3px;width:60px; height:30px;'>
-              <!-- Options2 will be added dynamically -->
-          </select>
-        </div> 
-
-
-        <div style="display: flex; justify-content:center; margin:10px;width:200px;">  
-          <p style="font-size:16px;width:100px margin:0px; padding:0px;">フロー値：</p>
-          <select id="Flow" name="Flow" style='color: white; border-color: #3b82f6; color: white; font-size: 14px; margin:10px; background: #8EA9DB; border-radius: 3px; width: 60px; height:30px;'>
-            <!-- Options will be added dynamically -->
-          </select>
-
-         </div>  
+<h3>設計図書基準値・プラント設定基準値</h3>
+<div style="display: flex; justify-content:flex-start;margin:5px;">
+    <div style="width:450px;">
+        <p style="margin:0px;font-size:18px;">■設計図書基準値</p>
+        <form name="form1" action="conmanege_act.php" method="post" style="background-color: #DDEBF7;">
+            ◆セメントの種類：　<input id="Type"  name="Type" type="text" style="margin:10px; width:220px;" value="<?= $type ?>"/><br>
+            ◆設計基準強度Fc：　<input id="Strength" name="Strength" type="text" style="margin:10px;width:50px;" value="<?= $strength ?>"/>N/mm2<br>
+            ◆スランプフロー：　<input id="Slump" name="Slump" type="text" style="margin:10px; width:50px;" value="<?= $slump ?>"/>cm<br>
+            ◆目標空気量：　　　<input id="Air" name="Air" type="text" style="margin:10px; width:50px;" value="<?= $air ?>"/>%<br>
+            ◆単位水量：　　　　<input id="Water" name="Water" type="text" style="margin:10px; width:50px;" value="<?= $water ?>"/>kg/cm3以下<br>
+            ◆水結合材比：　　　<input id="Ww" name="Ww" type="text" style="margin:10px; width:50px;" value="<?= $ww ?>"/>%以下<br>
+            ◆塩化物含有量：　　<input id="Chlo" name="Chlo" type="text" style="margin:10px; width:50px;" value="<?= $chlo ?>"/>kg/m3以下<br>
+            ◆ブリーディング量：<input id="Bb" name="Bb" type="text" style="margin:10px; width:50px;" value="<?= $bb ?>"/>cm3/cm2以下<br>
+            ◆沈　降　量：　　　<input id="Sink" name="Sink" type="text" style="margin:10px; width:50px;" value="<?= $sink ?>"/>mm以下　　　
+            <input style="margin:10px;font-size:16px;" type="submit" value="登録" />
+        </form>
+    </div>
+ 
+    <div style="width:450px;">
+        <p style="margin:0px;font-size:18px;">■プラント設定基準値</p>
+        <form name="form1" action="plant_act.php" method="post" style="background-color: #DDEBF7;">
+            ◆プラント工場名：　<input id="Plant"  name="Plant" type="text" style="margin:10px; width:200px;" value="<?= $plant ?>"/><br>
+            ◆プラント所在地：　<input id="Address" name="Address" type="text" style="margin:10px;width:250px;" value="<?= $address ?>"/><br>
+            ◆想定運搬時間：　　<input id="Time" name="Time" type="Time" style="margin:10px; width:50px;" value="<?= $air ?>"/>分<input type="text" name="Distance" style="margin:10px; width:50px;" value="<?= $range2 ?>"/>km<br>
+            ◆設計基準強度Fc：　<input id="Strength" name="Strength" type="text" style="margin:10px; width:50px;" value="<?= $design_strength ?>"/>N/mm2<br>
+            ◆スランプフロー：　<input id="Slump" name="Slump" type="text" style="margin:10px; width:50px;" value="<?= $design_slump ?>"/>cm<br>
+            ◆配合（呼び名）：　<input id="Mix" name="Mix" type="text" style="margin:10px; width:50px;" value="<?= $mix ?>"/><br>
+            ◆単位セメント量：　<input id="Ceme" name="Ceme" type="text" style="margin:10px; width:50px;" value="<?= $ceme ?>"/>kg/m3<br>
+            ◆単位水量：　　　　<input id="Water" name="Water" type="text" style="margin:10px; width:50px;" value="<?= $water ?>"/>kg/cm3<br>
+            ◆水セメント比：　　<input id="WCrate" name="WCrate" type="text" style="margin:10px; width:50px;" value="<?= $wcrate ?>"/>　　　
+            <input style="margin:10px;font-size:16px;" type="submit" value="登録" />
+        </form>
+    </div>
 </div>
-<p style="margin:0px;font-size:18px;">■設計図書基準値</p>
- ◆セメントの種類：　　<input id="Slump"  name="Slump" type="text" style="margin:10px; width:50px;" value="<?= $flow ?>"/>cm ±<input type="text" id="Span" name="Span" style="margin:10px; width:50px;"value="<?= $range ?>"/>cm<br>
- ◆設計基準強度Fc：　<input id="tempmin" name="Tempmin" type="text" style="margin:10px;width:50px;" value="<?= $tempmin ?>"/>℃以上<input type="text" name="Tempmax" style="margin:10px;width:50px;" value="<?= $tempmax ?>"/>℃以下<br>
- ◆スランプフロー：　　　　　　<input id="Air" name="Air" type="text" style="margin:10px; width:50px;" value="<?= $air ?>"/>±<input type="text" name="AirSpan" style="margin:10px; width:50px;" value="<?= $range2 ?>"/>％<br>
- ◆目標空気量：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下<br>
- ◆単位水量：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下<br>
- ◆水結合材比：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下<br>
- ◆塩化物含有量：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下<br>
- ◆ブリーディング量：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下<br>
- ◆沈降量：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下
- <input style="margin:10px;" type="submit" value="登録" />
- 
 
-<p style="margin:0px;font-size:18px;">■プラント設定基準値</p>
- ◆プラント工場名：　　<input id="Slump"  name="Slump" type="text" style="margin:10px; width:50px;" value="<?= $flow ?>"/>cm ±<input type="text" id="Span" name="Span" style="margin:10px; width:50px;"value="<?= $range ?>"/>cm<br>
- ◆プラント所在地：　<input id="tempmin" name="Tempmin" type="text" style="margin:10px;width:50px;" value="<?= $tempmin ?>"/>℃以上<input type="text" name="Tempmax" style="margin:10px;width:50px;" value="<?= $tempmax ?>"/>℃以下<br>
- ◆想定運搬時間：　　　　　　<input id="Air" name="Air" type="text" style="margin:10px; width:50px;" value="<?= $air ?>"/>±<input type="text" name="AirSpan" style="margin:10px; width:50px;" value="<?= $range2 ?>"/>％<br>
- ◆設計基準強度：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下　　　　
- ◆スランプフロー：　　　　　　<input id="Air" name="Air" type="text" style="margin:10px; width:50px;" value="<?= $air ?>"/>±<input type="text" name="AirSpan" style="margin:10px; width:50px;" value="<?= $range2 ?>"/>％<br>
- ◆単位セメント量：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下<br>
- ◆単位水量：　　　　　　<input id="Air" name="Air" type="text" style="margin:10px; width:50px;" value="<?= $air ?>"/>±<input type="text" name="AirSpan" style="margin:10px; width:50px;" value="<?= $range2 ?>"/>％<br>
- ◆水セメント比：　　　<input id="ChloMax" name="ChloMax" type="text" style="margin:10px; width:50px;" value="<?= $chlomax ?>"/>kg/m3以下<br>
- <input style="margin:10px;" type="submit" value="登録" />
- 
-</form>
-
-<p style="margin:0px;">管理基準値登録値</p> 
+<p style="margin:0px;">コンクリート設計仕様・プラント設定値</p> 
 <table style="font-size: 12px;width: 600px;">
  <?= $view_x ?>
 </table>
- <p style="margin:0px;">コンクリート仕様・プラント設定値</p>
+ <p style="margin:0px;">管理基準値登録値</p>
  <tabe style="font-size: 12px;width: 600px;">
  <?= $view_y ?>
  </table>

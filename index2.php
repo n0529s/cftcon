@@ -68,6 +68,10 @@ foreach ($stmt as $row) {
     <div>
         <input type="button" onclick="location.href='./accept.php'" value="受入検査へ" style='coler:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:10px;width:120px;'>
         <input type="button" onclick="location.href='./time.php'" value="打上高管理へ" style='coler:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:10px;'>
+        <a href="https://d28000001pumpeaw.my.salesforce-sites.com/" target="_blank">
+        <button type="button" style='coler:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:10px;'>配車管理へ</button>
+        </a>
+
     </div>
 </div>
     <div style="display: flex; justify-content:space-around;margin:5px;width:300px;padding:0px;">
@@ -85,55 +89,35 @@ foreach ($stmt as $row) {
 
 
 
- <canvas id="core" width="1100" height="600"></canvas>
 
-
-
-
-
-<!-- メニュー表示 -->
-  <div class="menu" style='display:flex;align-items: flex-end;'>
-   <button type="button">柱選択変更</button>
-   <a href="https://d28000001pumpeaw.my.salesforce-sites.com/" target="_blank">
-   <button type="button">配車状況</button>
-  </a>
-   <button type="button">受入検査</button>
-   <button type="button">施工状況</button>
-  </div>
-</div>   
-
-
-<div id="video">
+ <div id="video">
+<p>充填状況確認</p>
  <iframe
    id="eizo" 
    src="http://10.58.224.6/live.asp?r=201610270.17104665163885002" 
-   title="PC画面">
+   title="PC画面" width=300px height=300px;>
   </iframe>
 </div>
 
 
-<!-- 設定 -->
- <h1 class="set">設定</h1>
- <button type="button">設定</button>
-
-<!-- 柱選択 -->
-<h1 class="set">柱選択</h1>
-
-  <p>柱選択</p>
-
-<!-- <a href="./img/PMO港南2丁目1F伏図.png"></a> -->
 
 
 
- <!--配車管理 -->
- <h1 class="car">配車管理</h1>
 
 
 
-<a href="https://d28000001pumpeaw.my.salesforce-sites.com/" target="_blank">
-  <button type="button">配車管理</button>
 
-</a>
+
+
+
+
+
+
+
+
+
+
+
  
   <!-- <iframe src="http://www.tcc-measure.jp/cnst-manage0/pile_logon.php" width="1280" height="800" title="PC画面"></iframe> -->
 
