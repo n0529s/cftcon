@@ -6,6 +6,8 @@ $userid = $_SESSION['userid'];
 $username = $_SESSION['username'];
 $gen_name = $_SESSION['gen_name'];
 $pill_num = $_SESSION["pill_num"];
+$accept_id =  $_GET["id"];
+
 
 var_dump($pill_num);
 
@@ -75,6 +77,34 @@ if ($status3 === false) {
 }
 
 
+// ４．修正データ抽出
+$slump_ac ="";
+$air_ac ="";
+$temp_ac ="";
+$stcore_numY2 ="";
+$reach_50 ="";
+$stop_time ="";
+
+
+
+
+$stmt4 = $pdo->prepare("SELECT * FROM conaccept WHERE id=:accept_id");
+$stmt4->bindValue(':accept_id', $accept_id, PDO::PARAM_STR);
+$status4 = $stmt4->execute();
+foreach ($stmt4 as $row) {
+  $num_times2 = $row['num_times'];
+  $slump_ac =$row['slump_ac'];
+  $air_ac =$row['air_ac'];
+  $temp_ac =$row['temp_ac'];
+  $ion_ac =$row['ion_ac'];
+  $reach_50 =$row['reach_50'];
+  $stop_time =$row['stop_time'];
+
+
+
+}
+
+
 ?>
 
 
@@ -115,12 +145,12 @@ if ($status3 === false) {
     </div>
 </div>
 
-<form name="form21" action="accept_act.php" method="post">
-        <div style="margin-left:20px;">
-        <p>検査回数:　<?= $num_times ?>回目</p>
+<form name="form21" action="accept_update.php" method="post">
+    <div style="margin-left:20px;">
+        <p>検査回数:　<?= $num_times2 ?>回目</p>
         <span id="view_clock"></span>
  
-        </div>
+     </div>
             <div style="display: flex; justify-content:space-around;margin:5px;width:300px;padding:0px;">
                 <p style="font-size:16px; margin:3px;">杭番号：<?= $pill_num ?></p>
                 <p style="font-size:16px; margin:3px;">杭符号：<?= $pill_sign ?></p>
@@ -132,28 +162,29 @@ if ($status3 === false) {
 
         <div style="display: flex; justify-content:space-around;margin:10px; width:700px;">
                     <div style="width:400px">
+                         <input type="hidden" name="Id" value=<?= $accept_id ?> />
                          <input type="hidden" name="Num_times" value=<?= $num_times ?> />
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
                           <p style="margin:5px;width:150px">〇スランプフロー:</p>
-                          <input type="text" name="Slump" style="width:80px" />
+                          <input type="text" name="Slump" style="width:80px" value='<?= $slump_ac ?>'/>
                           <p style="margin:5px;">(cm)</p>
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
                           <p style="margin:5px;width:150px">〇空 気 量:</p>
-                          <input type="text" name="Air" style="width:80px"/>
+                          <input type="text" name="Air" style="width:80px" value='<?= $air_ac ?>' />
                           <p style="margin:5px;">(％)</p>
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
                           <p style="margin:5px;width:150px">〇コンクリート温度:</p>
-                          <input type="text" name="Temp" style="width:80px"/>
+                          <input type="text" name="Temp" style="width:80px" value='<?= $temp_ac ?>' />
                           <p style="margin:5px;">(℃)</p>
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
                           <p style="margin:5px;width:150px">〇塩化物イオン量:</p>
-                          <input type="text" name="Chlo" style="width:80px"/>
+                          <input type="text" name="Chlo" style="width:80px" value='<?= $ion_ac ?>'/>
                           <p style="margin:5px;">(kg/m3)</p>
                           </div>
 
@@ -167,19 +198,17 @@ if ($status3 === false) {
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
-                          <p style="margin:5px;width:150px">〇合否判定</p>
-                          <select name='Gouhi' style='color:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background-color:#8EA9DB; border-radius:5px; margin:0px; width:80px;'>
-                            <option value='-'>－</option>
-                            <option value='合格'>合格</option>
-                            <option value='不合格'>不合格</option>
-                          </select>
+                              <p style="margin:5px;width:150px">〇合否判定</p>
+                              <select name='Gouhi' style='color:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background-color:#8EA9DB; border-radius:5px; margin:0px; width:80px;'>
+                                <option value='-'>－</option>
+                                <option value='合格'>合格</option>
+                                <option value='不合格'>不合格</option>
+                              </select>
                           </div>
 
                           <p>備考</p>
                           <textarea name="Memo" style="width:400px; height:75px; vertical-align:top;"></textarea>
                           
-                         
-                        
 
                       </div>
 
@@ -187,44 +216,51 @@ if ($status3 === false) {
                           <p>＊50cm到達時間・停止時間は参考値</p>
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
                           <p style="margin:5px;width:150px">〇50㎝到達時間(秒):</p>
-                          <input type="text" name="Arr50" style="width:80px"/>
+                          <input type="text" name="Arr50" style="width:80px" value='<?= $reach_50 ?>'/>
                           <p style="margin:5px;">秒</p>
                           </div>
                           
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
                           <p style="margin:5px;width:150px">〇停止時間(秒):</p>
-                          <input type="text" name="Stop_time" style="width:80px"/>
+                          <input type="text" name="Stop_time" style="width:80px" value='<?= $stop_time ?>'/>
                           <p style="margin:5px;">秒</p>
                           </div>
 
-                          <input style="margin:10px;font-size:16px;" type="submit" value="登録" />
+                          <input style="margin:10px;font-size:16px;" type="submit" value="修正" />
 
 
 
-                        <!-- <form action="送信先パス" method="post" enctype="multipart/form-data"> -->
-                          <dl style="margin-left:20px;">
-                            <dd>
-                              <div>
-                              <label><span>〇カメラ（全景）</span>
-                              <input type="file" capture="environment" accept="image/*"></label>
-                              </div>
-                              <div>
-                                <label><span>〇カメラ（黒板）</span>
-                                <input type="file" capture="environment" accept="image/*"></label>
-                                </div>
-                            </dd>
-                          </dl>
-                      </div>
-        </div>
+                            <!-- <form action="送信先パス" method="post" enctype="multipart/form-data"> -->
+                              <dl style="margin-left:20px;">
+                                <dd>
+                                  <div>
+                                  <label><span>〇カメラ（全景）</span>
+                                  <input type="file" capture="environment" accept="image/*"></label>
+                                  </div>
+                                  <div>
+                                    <label><span>〇カメラ（黒板）</span>
+                                    <input type="file" capture="environment" accept="image/*"></label>
+                                    </div>
+                                </dd>
+                              </dl>
+                         </div>
+      
+        
+    </form>
 
-
- <p style="margin:0px;">■受入検査記録値</p>
+<div style="margin-left:20px;">
+ <p style="margin:0px 0px 0px 10px;">■受入検査記録値</p>
  <table style="font-size: 12px;width: 800px;">
  <?= $view_x ?>
  </table>
+</div>
 
-        
-</form>
+
+
+
+
+
+
 
 <!-- 時計表示 -->
 <script type="text/javascript">

@@ -55,7 +55,7 @@ if ($status22 == 0) {
         $error = $stmt->errorInfo();
         exit("ErrorMessage: " . $error[2]);
     } else {
-        header('Location: constandard.php');
+        header('Location: conmanege.php');
         exit();
     }
 
@@ -88,7 +88,7 @@ if ($status22 == 0) {
         $error = $stmt->errorInfo();
         exit("ErrorMessage: " . $error[2]);
     } else {
-        header('Location: constandard.php');
+        header('Location: conmanege.php');
         exit();
     }
 }

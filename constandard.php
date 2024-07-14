@@ -64,8 +64,8 @@ $tempmin = $result2 ["contempmin"];
 
 // ４．データ表示
 $view_x = "<tr text-align='center' style='background: #BDD7EE;color:#833C0C;'><th width:14%;>種別</th><th  width:14%;>呼び強度</th><th width:14%;>フロー</th><th width:5%;>範囲</th><th width:14%;>空気量</th><th width:5%;>範囲</th><th width:14%;>塩化物</th><th width:10%;>Con温度Min</th><th width:10%;>Con温度MAX</th></tr>";
-$view_y = "<tr style='background: #BDD7EE;color:#833C0C'><th width:20%;>通り芯符号</th><th width:20%;>間隔</th><th width:20%;>修正</th><th width:20%;>削除</th></tr>";
-
+$view_y = "<tr text-align='center' style='background: #BDD7EE;color:#833C0C;'><th width='25%'>種類</th><th width='10%'>Fc強度</th><th width='10%'>フロー</th><th width='10%'>目標空気量</th><th width='10%'>単位水量</th><th width='10%'>水結合材比</th><th width='10%'>塩化物</th><th width='10%'>ﾌﾞﾘｰﾃﾞｨﾝｸﾞ量</th><th width='10%'>沈下量</th></tr>";
+$view_z = "<tr text-align='center' style='background: #BDD7EE;color:#833C0C;'><th width='10%'>プラント名</th><th width='10%'>住所</th><th width='5%'>運搬時間</th><th width='5%'>距離</th><th width='5%'>Fc強度</th><th width='5%'>フロー</th><th width='5%'>配合</th><th width='5%'>単位ｾﾒﾝﾄ量</th><th width='5%'>単位水量</th><th width='5%'>水セメント比</th></tr>";
 
 
 
@@ -82,6 +82,80 @@ $view_x .= '<td>'.$tempmax.'℃以下</td>';
 $view_x .= '</tr>';
 
 // var_dump($id);
+
+
+
+
+
+
+// 設計図書設定値表示
+$stmt33 = $pdo->prepare("SELECT * from constmanege2 where gen_name=:gen_name");
+    $stmt33->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
+    $status33 = $stmt33->execute();
+    
+    if ($status33 == false) {
+      sql_error($status33);
+    } else {
+      while ($result33 = $stmt33->fetch(PDO::FETCH_ASSOC)) {
+        $type = $result33["design_contype"];
+        $strength = $result33["design_strength"];
+        $slump = $result33["design_slump"];
+        $air = $result33["design_air"];
+        $water = $result33["design_water"];
+        $ww = $result33["design_ww"];
+        $chlo = $result33["design_chlo"];
+        $bb = $result33["design_bb"];
+        $sink = $result33["design_sink"];
+        
+        // ４.２データ表示
+        $view_y .= '<tr align="center"><td>' . $type . '</td>';
+        $view_y .= '<td>' . $strength . '</td>';
+        $view_y .= '<td>' . $slump . '</td>';
+        $view_y .= '<td>' . $air . '</td>';
+        $view_y .= '<td>' . $water . '</td>';
+        $view_y .= '<td>' . $ww . '</td>';
+        $view_y .= '<td>' . $chlo . '</td>';
+        $view_y .= '<td>' . $bb . '</td>';
+        $view_y .= '<td>' . $sink . '</td>';
+        $view_y .= '</tr>';
+      }
+    }
+// プラント入力値表示
+$stmt44 = $pdo->prepare("SELECT * from plant where gen_name=:gen_name");
+    $stmt44->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
+    $status44 = $stmt44->execute();
+    
+    if ($status44 == false) {
+      sql_error($status44);
+    } else {
+      while ($result44 = $stmt44->fetch(PDO::FETCH_ASSOC)) {
+        $plant = $result44["plant"];
+        $plant_address = $result44["plant_address"];
+        $plant_time = $result44["plant_time"];
+        $plant_distance = $result44["plant_distance"];
+        $plant_strength	 = $result44["plant_strength"];
+        $plant_slump = $result44["plant_slump"];
+        $plant_mix = $result44["plant_mix"];
+        $plant_ceme = $result44["plant_ceme"];
+        $plant_water = $result44["plant_water"];
+        $plant_wcrate = $result44["plant_wcrate"];
+  
+        
+        // ４.２データ表示
+        $view_z .= '<tr align="center"><td>' . $plant . '</td>';
+        $view_z .= '<td>' . $plant_address . '</td>';
+        $view_z .= '<td>' . $plant_time . '分</td>';
+        $view_z .= '<td>' . $plant_distance . '</td>';
+        $view_z .= '<td>' . $plant_strength . '</td>';
+        $view_z .= '<td>' . $plant_slump . '</td>';
+        $view_z .= '<td>' . $plant_mix . '</td>';
+        $view_z .= '<td>' . $plant_ceme . '</td>';
+        $view_z .= '<td>' . $plant_water . '</td>';
+        $view_z .= '<td>' . $plant_wcrate . '</td>';
+        $view_z .= '</tr>';
+      }
+    }
+
 
 
 ?>
@@ -158,15 +232,17 @@ $view_x .= '</tr>';
  
 </form>
 
-<p style="margin:0px;">管理基準値登録値</p> 
+<p style="margin:25px 0px 0px 0px;">■管理基準値登録値</p> 
 <table style="font-size: 12px;width: 600px;">
  <?= $view_x ?>
 </table>
- <p style="margin:0px;">コンクリート仕様・プラント設定値</p>
- <tabe style="font-size: 12px;width: 600px;">
+ <p style="margin:20px 0px 0px 0px;">■コンクリート仕様・プラント設定値</p>
+ <table style="font-size: 12px;width: 800px;">
  <?= $view_y ?>
  </table>
-
+ <table style="font-size: 12px;width: 800px;">
+ <?= $view_z ?>
+ </table>
  
 
  <input type="button" onclick="location.href='./sekkei.php'" value="設計入力に戻る" style='color:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:10px;'>
