@@ -143,8 +143,23 @@ if (isset($_POST['upload2'])) {//送信ボタンが押された場合
     }
 }
 
+// ５．３ 画像ファイル検索
+$stmt5 = $pdo->prepare("SELECT * FROM image_accept WHERE gen_name=:gen_name && pill_num = :pill_num && num_times=:num_times ORDER BY rgtime DESC
+LIMIT 1;");
+$stmt5->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
+$stmt5->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);
+$stmt5->bindValue(':num_times', $num_times, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 
+$status5 = $stmt5->execute();
+if ($status5 === false) {
+    // エラーハンドリング
+    sql_error($stmt5->errorInfo());
+} else {
+    $result5 = $stmt5->fetch(PDO::FETCH_ASSOC);
+    $image11 = $result5["image1"];
+}
 
+var_dump($image11);
 
 
 ?>
@@ -162,7 +177,7 @@ if (isset($_POST['upload2'])) {//送信ボタンが押された場合
 </head>
 <body>
 
-<header style="position: fixed;width:100%;z-index: 9999;top: 0;left: 0;margin: 0;padding: 0;">
+<header style="position: fixed;width:100%;z-index: 9999;top: 100;left: 0;margin: 0;padding: 0;">
   <nav class="navbar navbar-default" style="background:linear-gradient(to bottom, #8EA9DB 70%, #D9EAFF 100%); border-color:#305496;font-size:15px;display:flex;justify-content:space-between;">
     <div class="container-fluid"><p style="font-size: 20px;color:#E2EFDA;font-weight: bold;">CFTコンクリート施工管理システム</p></div>
     <div>
@@ -280,7 +295,7 @@ if (isset($_POST['upload2'])) {//送信ボタンが押された場合
                                     <label><span>〇カメラ（全景）</span>
                                     <input type="file" capture="environment" accept="image/*" name="image1"></label>
                                     <input type="submit" name="upload" value="保存１">
-                                    <img src="images/<?= $image1 ?> " style="height:30px;width:40px;margin:10px"></img>
+                                    <img src="images/<?= $image11 ?> " style="height:30px;width:40px;margin:10px"></img>
                                 </form>
                               </div>
                               <div>
@@ -288,7 +303,7 @@ if (isset($_POST['upload2'])) {//送信ボタンが押された場合
                                     <label><span>〇カメラ（黒板）</span>
                                     <input type="file" capture="environment" accept="image/*" name="image2"></label>
                                     <input type="submit" name="upload2" value="保存２">
-                                    <img src="images/<?= $image2 ?> " style="height:30px;width:40px;margin:10px"></img>
+                                    <img src="images/<?= $image22 ?> " style="height:30px;width:40px;margin:10px"></img>
                              </form>
                                 
                                 </div>
