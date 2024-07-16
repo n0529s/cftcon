@@ -62,7 +62,7 @@ $pdo = db_conn();
 
 // ３．SQL文を用意(データ登録：UPDATE)
 $stmt = $pdo->prepare( "UPDATE conaccept SET slump_ac=:slump_ac,
- air_ac = :air_ac, temp_ac=:temp_ac, ion_ac = :ion_ac, reach_50 = :reach_50, stop_time = :stop_time
+ air_ac = :air_ac, temp_ac=:temp_ac, ion_ac=:ion_ac, reach_50=:reach_50, stop_time=:stop_time, bunri=:bunri, gouhi=:gouhi,memo=:memo
   WHERE id = :id;" );
 
 // 4. バインド変数を用意
@@ -73,6 +73,9 @@ $stmt->bindValue(':temp_ac', $ac_temp, PDO::PARAM_STR);  //Integer（数値の�
 $stmt->bindValue(':ion_ac', $ac_chlo, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 $stmt->bindValue(':reach_50', $arr50, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 $stmt->bindValue(':stop_time', $stop_time, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+$stmt->bindValue(':bunri', $bunri, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+$stmt->bindValue(':gouhi', $gouhi, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+$stmt->bindValue(':memo', $memo, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 
 
 

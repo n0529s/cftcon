@@ -58,8 +58,8 @@ $num_times = $num_times + $status2;
 
 
 // ３．SQL文を用意(データ登録：INSERT)
-  $stmt = $pdo->prepare("INSERT INTO conaccept(id, gen_name, pill_num, num_times, slump_ac, air_ac, temp_ac, ion_ac, reach_50, stop_time, datetime) VALUES 
-( NULL, :gen_name, :pill_num, :num_times, :slump_ac, :air_ac, :temp_ac, :ion_ac, :reach_50, :stop_time, sysdate())");
+  $stmt = $pdo->prepare("INSERT INTO conaccept(id, gen_name, pill_num, num_times, slump_ac, air_ac, temp_ac, ion_ac, bunri, gouhi, reach_50, stop_time, memo, datetime) VALUES 
+( NULL, :gen_name, :pill_num, :num_times, :slump_ac, :air_ac, :temp_ac, :ion_ac, :bunri, :gouhi, :reach_50, :stop_time, :memo, sysdate())");
 
 // 4. バインド変数を用意
 $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
@@ -71,6 +71,10 @@ $stmt->bindValue(':temp_ac', $ac_temp, PDO::PARAM_STR);  //Integer（数値の�
 $stmt->bindValue(':ion_ac', $ac_chlo, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 $stmt->bindValue(':reach_50', $arr50, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 $stmt->bindValue(':stop_time', $stop_time, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+$stmt->bindValue(':bunri', $bunri, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+$stmt->bindValue(':gouhi', $gouhi, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+$stmt->bindValue(':memo', $memo, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+
 
 
 

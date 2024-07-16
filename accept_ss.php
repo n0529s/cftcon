@@ -47,7 +47,8 @@ if ($status2 === false) {
 
 // ３．データ表示
 
-$view_x = "<tr text-align='center' style='background: #BDD7EE;color:#833C0C;'><th width:5%;>検査回数</th><th  width:10%;>日時</th><th width:10%;>スランプ</th><th width:5%;>空気量</th><th width:14%;>Con温度</th><th width:5%;>塩化物</th><th width:14%;>修正</th><th width:10%;>削除</th></tr>";
+$view_x = "<tr align='center' style='background: #BDD7EE;color:#833C0C;'><th align='center' width:5%;>検査回数</th><th  align='center'  width:10%;>日時</th><th align='center' width:10%;>スランプ</th><th width:5%;>空気量</th><th width:14%;>Con温度</th><th width:5%;>塩化物</th><th width:5%;>50cm到達</th><th width:5%;>停止時間</th><th width:5%;>分離抵抗</th><th width:5%;>合否判定</th><th width:14%;>修正</th><th width:10%;>削除</th></tr>";
+$view_bunri = "";
 
 $stmt3 = $pdo->prepare("SELECT * FROM conaccept WHERE gen_name=:gen_name && pill_num = :pill_num");
 $stmt3->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
@@ -63,16 +64,24 @@ if ($status3 === false) {
     while( $result3 = $stmt3->fetch(PDO::FETCH_ASSOC)){ 
       //GETデータ送信リンク作成
       // <a>で囲う。
-      $view_x .= '<tr text-align="center"><td>'.$result3['num_times'].'</td>';
-      $view_x .= '<td text-align="center">'.$result3['datetime'].'</td>';
+      $view_x .= '<tr align="center"><td>'.$result3['num_times'].'</td>';
+      $view_x .= '<td>'.$result3['datetime'].'</td>';
       $view_x .= '<td>'.$result3['slump_ac'].'</td>';
       $view_x .= '<td>'.$result3['air_ac'].'</td>';
       $view_x .= '<td>'.$result3['temp_ac'].'</td>';
       $view_x .= '<td>'.$result3['ion_ac'].'</td>';
+      $view_x .= '<td>'.$result3['reach_50'].'</td>';
+      $view_x .= '<td>'.$result3['stop_time'].'</td>';
+      $view_x .= '<td>'.$result3['bunri'].'</td>';
+      $view_x .= '<td>'.$result3['gouhi'].'</td>';
  
       $view_x .= '<td id="ss"><a href=accept_ss.php?id='.$result3['id'].'>修正</td>';
       $view_x .= '<td id="aa"><a href=accept_aa.php?id='.$result3['id'].'>削除</td>';
       $view_x .= '</tr>';
+
+
+
+
   }
 }
 
@@ -99,6 +108,36 @@ foreach ($stmt4 as $row) {
   $ion_ac =$row['ion_ac'];
   $reach_50 =$row['reach_50'];
   $stop_time =$row['stop_time'];
+  $memo =$row['memo'];
+
+
+      if($row['bunri'] == '良好'){
+        $view_bunri = "<option value='-'>－</option>
+        <option value='良好' selected>良好</option>
+        <option value='不良'>不良</option>";
+      }else if($row['bunri'] == '不良'){
+        $view_bunri = "<option value='-'>－</option>
+        <option value='良好'>良好</option>
+        <option value='不良' selected>不良</option>";
+      }else{
+        $view_bunri = "<option value='-'>－</option>
+        <option value='良好'>良好</option>
+        <option value='不良'>不良</option>";
+      }
+
+      if($row['gouhi'] == '合格'){
+          $view_gouhi = "<option value='-'>－</option>
+          <option value='合格' selected>合格</option>
+          <option value='不合格'>不合格</option>";
+        }else if($row['gouhi'] == '不合格'){
+          $view_gouhi = "<option value='-'>－</option>
+          <option value='合格'>合格</option>
+          <option value='不合格' selected>不合格</option>";
+        }else{
+          $view_gouhi = "<option value='-'>－</option>
+          <option value='合格'>合格</option>
+          <option value='不合格'>不合格</option>";
+        }
 
 
 
@@ -114,7 +153,7 @@ foreach ($stmt4 as $row) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
 <link rel="stylesheet" href="css/main.css" />
-<link href="css/bootstrap.min.css" rel="stylesheet">
+<!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
 <style>div{padding: 10px;font-size:16px;}</style>
 <title>受入検査</title>
 </head>
@@ -132,18 +171,18 @@ foreach ($stmt4 as $row) {
 </header>
 
 <p style="height:100px;"></p>
-<!-- <p style="font-size:20px;">現場名：<?= $gen_name ?></p> -->
+  <!-- <p style="font-size:20px;">現場名：<?= $gen_name ?></p> -->
 <h3>受入検査</h3>
-<div style="display: flex; justify-content:flex-start;margin:5px;">
-    <div>
-        <p style="font-size:20px;">現場名：<?= $gen_name ?></p>
-        <p style="font-size:20px;">杭番号：<?= $pill_num ?></p>
-    </div>
-    <div>
-        <input type="button" onclick="location.href='./index2.php?id=<?= $pill_num ?>'" value="施工管理へ" style='coler:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:10px;width:120px;'>
-        <input type="button" onclick="location.href='./time.php'" value="打上高管理へ" style='coler:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:10px;'>
-    </div>
-</div>
+  <div style="display: flex; justify-content:flex-start;margin:5px;">
+      <div>
+          <p style="font-size:20px;">現場名：<?= $gen_name ?></p>
+          <p style="font-size:20px;">杭番号：<?= $pill_num ?></p>
+      </div>
+      <div>
+          <input type="button" onclick="location.href='./index2.php?id=<?= $pill_num ?>'" value="施工管理へ" style='coler:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:10px;width:120px;'>
+          <input type="button" onclick="location.href='./time.php'" value="打上高管理へ" style='coler:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:10px;'>
+      </div>
+  </div>
 
 <form name="form21" action="accept_update.php" method="post">
     <div style="margin-left:20px;">
@@ -165,63 +204,57 @@ foreach ($stmt4 as $row) {
                          <input type="hidden" name="Id" value=<?= $accept_id ?> />
                          <input type="hidden" name="Num_times" value=<?= $num_times ?> />
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
-                          <p style="margin:5px;width:150px">〇スランプフロー:</p>
-                          <input type="text" name="Slump" style="width:80px" value='<?= $slump_ac ?>'/>
-                          <p style="margin:5px;">(cm)</p>
+                              <p style="margin:5px;width:170px">〇スランプフロー:</p>
+                              <input type="text" name="Slump" style="width:80px" value='<?= $slump_ac ?>'/>
+                              <p style="margin:5px;">(cm)</p>
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
-                          <p style="margin:5px;width:150px">〇空 気 量:</p>
-                          <input type="text" name="Air" style="width:80px" value='<?= $air_ac ?>' />
-                          <p style="margin:5px;">(％)</p>
+                              <p style="margin:5px;width:170px">〇空 気 量:</p>
+                              <input type="text" name="Air" style="width:80px" value='<?= $air_ac ?>' />
+                              <p style="margin:5px;">(％)</p>
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
-                          <p style="margin:5px;width:150px">〇コンクリート温度:</p>
+                          <p style="margin:5px;width:170px">〇コンクリート温度:</p>
                           <input type="text" name="Temp" style="width:80px" value='<?= $temp_ac ?>' />
                           <p style="margin:5px;">(℃)</p>
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
-                          <p style="margin:5px;width:150px">〇塩化物イオン量:</p>
+                          <p style="margin:5px;width:170px">〇塩化物イオン量:</p>
                           <input type="text" name="Chlo" style="width:80px" value='<?= $ion_ac ?>'/>
                           <p style="margin:5px;">(kg/m3)</p>
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
-                          <p style="margin:5px;width:150px">〇分離抵抗性</p>
+                          <p style="margin:5px;width:170px">〇分離抵抗性</p>
                           <select name='Bunri' style='color:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background-color:#8EA9DB; border-radius:5px; margin:0px; width:80px;'>
-                            <option value='-'>－</option>
-                            <option value='良好'>良好</option>
-                            <option value='不良'>不良</option>
+                          <?= $view_bunri ?>
                           </select>
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
-                              <p style="margin:5px;width:150px">〇合否判定</p>
+                              <p style="margin:5px;width:170px">〇合否判定</p>
                               <select name='Gouhi' style='color:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background-color:#8EA9DB; border-radius:5px; margin:0px; width:80px;'>
-                                <option value='-'>－</option>
-                                <option value='合格'>合格</option>
-                                <option value='不合格'>不合格</option>
+                               <?= $view_gouhi ?>
                               </select>
                           </div>
 
                           <p>備考</p>
-                          <textarea name="Memo" style="width:400px; height:75px; vertical-align:top;"></textarea>
-                          
-
-                      </div>
+                          <textarea name="Memo" style="width:400px; height:75px; vertical-align:top;"><?= $memo ?></textarea> 
+                       </div>
 
                       <div style="width:350px">
                           <p>＊50cm到達時間・停止時間は参考値</p>
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
-                          <p style="margin:5px;width:150px">〇50㎝到達時間(秒):</p>
+                          <p style="margin:5px;width:170px">〇50㎝到達時間(秒):</p>
                           <input type="text" name="Arr50" style="width:80px" value='<?= $reach_50 ?>'/>
                           <p style="margin:5px;">秒</p>
                           </div>
                           
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
-                          <p style="margin:5px;width:150px">〇停止時間(秒):</p>
+                          <p style="margin:5px;width:170px">〇停止時間(秒):</p>
                           <input type="text" name="Stop_time" style="width:80px" value='<?= $stop_time ?>'/>
                           <p style="margin:5px;">秒</p>
                           </div>
@@ -234,19 +267,19 @@ foreach ($stmt4 as $row) {
                               <dl style="margin-left:20px;">
                                 <dd>
                                   <div>
-                                  <label><span>〇カメラ（全景）</span>
-                                  <input type="file" capture="environment" accept="image/*"></label>
+                                      <label><span>〇カメラ（全景）</span>
+                                      <input type="file" capture="environment" accept="image/*"></label>
                                   </div>
                                   <div>
-                                    <label><span>〇カメラ（黒板）</span>
-                                    <input type="file" capture="environment" accept="image/*"></label>
-                                    </div>
+                                        <label><span>〇カメラ（黒板）</span>
+                                        <input type="file" capture="environment" accept="image/*"></label>
+                                  </div>
                                 </dd>
                               </dl>
-                         </div>
-      
+                       </div>
+                    </div>
         
-    </form>
+</form>
 
 <div style="margin-left:20px;">
  <p style="margin:0px 0px 0px 10px;">■受入検査記録値</p>
