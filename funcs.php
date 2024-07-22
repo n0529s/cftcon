@@ -9,17 +9,17 @@ function h($str)
 //※関数を作成し、内容をreturnさせる。
 //※ DBname等、今回の授業に合わせる。
 function db_conn(){
-    try {
-      $db_name = "cftcon";    //データベース名
-      $db_id   = "root";      //アカウント名
-      $db_pw   = "";      //パスワード：XAMPPはパスワード無しに修正してください。
-      $db_host = "localhost"; //DBホスト
-      $db_port = "3306";
-      $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host.';port='.$db_port.'', $db_id, $db_pw );
-      return $pdo;//ここを追加！！
-    } catch (PDOException $e) {
-        exit('DB Connection Error:' . $e->getMessage());
-    }
+  try {
+    $db_name = "cftcon";    //データベース名
+    $db_id   = "root";      //アカウント名
+    $db_pw   = "";      //パスワード：XAMPPはパスワード無しに修正してください。
+    $db_host = "localhost"; //DBホスト
+    $db_port = "3306";
+    $pdo = new PDO('mysql:dbname=' . $db_name . ';charset=utf8;host=' . $db_host.';port='.$db_port.'', $db_id, $db_pw);
+    return $pdo;//ここを追加！！
+  } catch (PDOException $e) {
+      exit('DB Connection Error:' . $e->getMessage());
+  }
 }
 
 

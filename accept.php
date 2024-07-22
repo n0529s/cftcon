@@ -162,6 +162,30 @@ if ($status5 === false) {
 var_dump($image11);
 
 
+// ５．４ 画像ファイル検索２
+$stmt6 = $pdo->prepare("SELECT * FROM image_accept2 WHERE gen_name=:gen_name && pill_num = :pill_num && num_times=:num_times ORDER BY rgtime DESC
+LIMIT 1;");
+$stmt6->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
+$stmt6->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);
+$stmt6->bindValue(':num_times', $num_times, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+
+$status6 = $stmt6->execute();
+if ($status6 === false) {
+    // エラーハンドリング
+    sql_error($stmt6->errorInfo());
+} else {
+    $result6 = $stmt6->fetch(PDO::FETCH_ASSOC);
+    $image22 = $result6["image2"];
+}
+
+var_dump($image22);
+
+
+
+
+
+
+
 ?>
 
 
@@ -177,7 +201,7 @@ var_dump($image11);
 </head>
 <body>
 
-<header style="position: fixed;width:100%;z-index: 9999;top: 100;left: 0;margin: 0;padding: 0;">
+<header style="position: fixed;width:100%;z-index: 9999;top: 0;left: 0;margin: 0;padding: 0;">
   <nav class="navbar navbar-default" style="background:linear-gradient(to bottom, #8EA9DB 70%, #D9EAFF 100%); border-color:#305496;font-size:15px;display:flex;justify-content:space-between;">
     <div class="container-fluid"><p style="font-size: 20px;color:#E2EFDA;font-weight: bold;">CFTコンクリート施工管理システム</p></div>
     <div>
@@ -291,7 +315,7 @@ var_dump($image11);
                           <dl style="margin-left:0px;">
                             <dd>
                               <div>
-                                <form method="post" enctype="multipart/form-data" action="">
+                                <form method="post" enctype="multipart/form-data" action="upload_act.php">
                                     <label><span>〇カメラ（全景）</span>
                                     <input type="file" capture="environment" accept="image/*" name="image1"></label>
                                     <input type="submit" name="upload" value="保存１">

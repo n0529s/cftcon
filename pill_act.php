@@ -13,14 +13,26 @@ $gen_name = $_SESSION['gen_name'];
 $offset_st = $_POST["offset_st"];
 $offset_end = $_POST["offset_end"];
 
-$offsetX2 = intval($offsetX);
-$offsetY2 = intval($offsetY);
-var_dump($offsetX);
-var_dump($offsetY);
+if($offsetX ==""){
+  $offsetX2=0;
+}else{
+  $offsetX2 = intval($offsetX);
+  var_dump($offsetX);
+  $offsetXX = $offsetX/1000;
+  var_dump($offsetXX);
+}
+  
+  
+if($offsetY ==""){
+  $offsetY2=0;
+}else{
+  $offsetY2 = intval($offsetY);
+  var_dump($offsetY);
+  $offsetYY = $offsetY/1000;
+  var_dump($offsetYY);
+}
+  
 
-$offsetXX = $offsetX/1000;
-$offsetYY = $offsetY/1000;
-var_dump($offsetXX);
 
 
 

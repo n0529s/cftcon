@@ -80,7 +80,7 @@ $status = $stmt->execute();
 
 $kaidaka = "";
 $rgtime = "";
-$rgtime3 = null;
+$rgtime3 = array();
 
 
 
@@ -103,7 +103,7 @@ else{
   }
 }
 
-var_dump($kaidaka);
+var_dump($rgtime3);
 
 
 

@@ -68,6 +68,9 @@ foreach ($stmt as $row) {
     <div>
         <input type="button" onclick="location.href='./accept.php'" value="受入検査へ" style='coler:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:10px;width:120px;'>
         <input type="button" onclick="location.href='./time.php'" value="打上高管理へ" style='coler:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background:#8EA9DB; border-radius:10px;'>
+        <input type="button" onclick="window.open('https://d28000001pumpeaw.my.salesforce-sites.com/', '_blank')" value="配車管理へ" style="color:white; border-color:#3b82f6; font-size:18px; margin:10px; background:#8EA9DB; border-radius:10px;">
+
+
     </div>
 </div>
     <div style="display: flex; justify-content:space-around;margin:5px;width:300px;padding:0px;">
@@ -77,20 +80,10 @@ foreach ($stmt as $row) {
     <div style="display: flex; justify-content:space-around;margin:5px;width:300px;padding:0px;">
         <p style="font-size:16px; margin:3px;">位置：<?=  $stcore_numX ?> － <?=  $stcore_numY ?></p>
         <p style="font-size:16px; margin:3px;">柱長：<?= $virtilength ?></p>
+
     </div>
 
-<div id="video2" >
-<p style="position:absolute; top:280px; left:350px;">充填状況確認</p>
- <iframe
-   style="position:absolute; top:300px; left:350px;transform: scale(0.5);"
-   id="eizo2" 
-   src="http://218.219.233.189/viewer/live/ja/live.html" 
-   title="PC画面2" width="800" height="600">
-  </iframe>
-  <p style="font-size:16px; color:white; position:absolute; top:302px; left:352px;">杭番号：<?= $pill_num ?></p>
-  <p></p>
 
-</div>
 
 
 
@@ -113,17 +106,36 @@ foreach ($stmt as $row) {
   </iframe>
 </div> -->
 
+<div style="display: flex; justify-content:space-around;margin:5px;width:300px;padding:0px;">
+      <div  id="video1">
+        <p>◆搬入口状況</p> 
+          <iframe 
+          width="400" height="300" src="https://www.youtube-nocookie.com/embed/9b8hzFfW5V0?si=T1kv2b6fwH9yvcPI" 
+          title="YouTube video player" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+          </iframe>
+      </div>
 
 
-  <h2>搬入口状況</h2> 
+  
+      <div id="video2">
+        <p>◆充填状況確認</p>
+        <div style="margin:0px auto; overflow:hidden;padding:0;width:400px;height:300px;" >
+        <iframe
+          src="http://10.58.224.6/live.asp?r=201610270.8554343267928939"
+          id="MJPEG_streaming"
+          style="transform: scale(0.6); transform-origin: top left; margin-top:-75px; margin-left:-160px;"
+          width="1000" height="900" 
+          title="PC画面2">
+          </iframe>
+          </div>
+        <p style="font-size:16px; color:white; position:absolute; top:400px; left:450px;">杭番号：<?= $pill_num ?></p>
+      <!-- http://218.219.233.189/viewer/live/ja/live.html"  "position:absolute; top:300px; left:350px;" "transform: scale(0.5);"-->
 
-     <iframe 
-     width="560" height="315" src="https://www.youtube-nocookie.com/embed/9b8hzFfW5V0?si=T1kv2b6fwH9yvcPI" 
-     title="YouTube video player" 
-     frameborder="0" 
-     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-    </iframe>
+      </div>
+      </div>
   
 
 
@@ -131,33 +143,9 @@ foreach ($stmt as $row) {
 
 
 
-</div>
 
-
-<!-- 設定 -->
- <h1 class="set">設定</h1>
- <button type="button">設定</button>
-
-<!-- 柱選択 -->
-<h1 class="set">柱選択</h1>
-
-  <p>柱選択</p>
-
-<!-- <a href="./img/PMO港南2丁目1F伏図.png"></a> -->
-
-
-
- <!--配車管理 -->
- <h1 class="car">配車管理</h1>
-
-
-
-<a href="https://d28000001pumpeaw.my.salesforce-sites.com/" target="_blank">
-  <button type="button">配車管理</button>
-
-</a>
  
-  <!-- <iframe src="http://www.tcc-measure.jp/cnst-manage0/pile_logon.php" width="1280" height="800" title="PC画面"></iframe> -->
+ 
 
 
 

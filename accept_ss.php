@@ -30,20 +30,20 @@ foreach ($stmt as $row) {
   $stcore_numY =$row['stcore_numY'];
 }
 
-// ２．登録情報検索
-$stmt2 = $pdo->prepare("SELECT COUNT(*) AS count FROM conaccept WHERE gen_name=:gen_name && pill_num = :pill_num");
-$stmt2->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
-$stmt2->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);
-$status2 = $stmt2->execute();
+// // ２．登録情報検索
+// $stmt2 = $pdo->prepare("SELECT COUNT(*) AS count FROM conaccept WHERE gen_name=:gen_name && pill_num = :pill_num");
+// $stmt2->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
+// $stmt2->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);
+// $status2 = $stmt2->execute();
 
-if ($status2 === false) {
-    // エラーハンドリング
-    sql_error($stmt2->errorInfo());
-} else {
-    $result2 = $stmt2->fetch(PDO::FETCH_ASSOC);
-    $num_times = $result2["count"] + 1;
-    $_SESSION["num_times"] = $num_times;
-}
+// if ($status2 === false) {
+//     // エラーハンドリング
+//     sql_error($stmt2->errorInfo());
+// } else {
+//     $result2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+//     $num_times = $result2["count"] + 1;
+//     $_SESSION["num_times"] = $num_times;
+// }
 
 // ３．データ表示
 
@@ -78,10 +78,6 @@ if ($status3 === false) {
       $view_x .= '<td id="ss"><a href=accept_ss.php?id='.$result3['id'].'>修正</td>';
       $view_x .= '<td id="aa"><a href=accept_aa.php?id='.$result3['id'].'>削除</td>';
       $view_x .= '</tr>';
-
-
-
-
   }
 }
 
@@ -93,9 +89,6 @@ $temp_ac ="";
 $stcore_numY2 ="";
 $reach_50 ="";
 $stop_time ="";
-
-
-
 
 $stmt4 = $pdo->prepare("SELECT * FROM conaccept WHERE id=:accept_id");
 $stmt4->bindValue(':accept_id', $accept_id, PDO::PARAM_STR);
@@ -109,7 +102,6 @@ foreach ($stmt4 as $row) {
   $reach_50 =$row['reach_50'];
   $stop_time =$row['stop_time'];
   $memo =$row['memo'];
-
 
       if($row['bunri'] == '良好'){
         $view_bunri = "<option value='-'>－</option>
@@ -138,10 +130,119 @@ foreach ($stmt4 as $row) {
           <option value='合格'>合格</option>
           <option value='不合格'>不合格</option>";
         }
-
-
-
 }
+
+// ４．２管理値抽出
+$stmt42 = $pdo->prepare("SELECT * FROM constmanege WHERE gen_name=:gen_name");
+$stmt42->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
+$status42 = $stmt42->execute();
+foreach ($stmt42 as $row) {
+  $slumpmax =$row['slumpmax'];
+  $slumpmin =$row['slumpmin'];
+  $airmax =$row['airmax'];
+  $airmin =$row['airmin'];
+  $contempmax =$row['contempmax'];
+  $contempmin =$row['contempmin'];
+  $chlomax =$row['chlomax'];
+}
+
+var_dump($slumpmin);
+
+
+
+
+
+// ５．１ 画像ファイルアップロード1
+$pdo = db_conn();
+    if (isset($_POST['upload'])) {//送信ボタンが押された場合
+        $image1 = uniqid(mt_rand(), true);//ファイル名をユニーク化
+        $image1 .= '.' . substr(strrchr($_FILES['image1']['name'], '.'), 1);//アップロードされたファイルの拡張子を取得
+        $file = "images/$image1";
+        $sql = " INSERT INTO image_accept(id, gen_name, pill_num, num_times, image1, rgtime) VALUES(NULL,:gen_name,:pill_num,:num_times,:image1,sysdate())";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':image1', $image1, PDO::PARAM_STR);
+        $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+        $stmt->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+        $stmt->bindValue(':num_times', $num_times2, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+
+        if (!empty($_FILES['image1']['name'])) {//ファイルが選択されていれば$imageにファイル名を代入
+            move_uploaded_file($_FILES['image1']['tmp_name'], './images/' . $image1);//imagesディレクトリにファイル保存
+            if (exif_imagetype($file)) {//画像ファイルかのチェック
+                $message = '画像をアップロードしました';
+                $stmt->execute();
+            } else {
+                $message = '画像ファイルではありません';
+            }
+        }
+    }
+
+// ５．２ 画像ファイルアップロード２
+$pdo = db_conn();
+if (isset($_POST['upload2'])) {//送信ボタンが押された場合
+    $image2 = uniqid(mt_rand(), true);//ファイル名をユニーク化
+    $image2 .= '.' . substr(strrchr($_FILES['image2']['name'], '.'), 1);//アップロードされたファイルの拡張子を取得
+    $file2 = "images/$image2";
+    $sql = " INSERT INTO image_accept2(id, gen_name, pill_num, num_times, image2, rgtime) VALUES(NULL,:gen_name,:pill_num,:num_times,:image2,sysdate())";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':image2', $image2, PDO::PARAM_STR);
+    $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+    $stmt->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+    $stmt->bindValue(':num_times', $num_times2, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+
+    if (!empty($_FILES['image2']['name'])) {//ファイルが選択されていれば$imageにファイル名を代入
+        move_uploaded_file($_FILES['image2']['tmp_name'], './images/' . $image2);//imagesディレクトリにファイル保存
+        if (exif_imagetype($file2)) {//画像ファイルかのチェック
+            $message = '画像をアップロードしました';
+            $stmt->execute();
+        } else {
+            $message = '画像ファイルではありません';
+        }
+    }
+}
+
+// ５．３ 画像ファイル検索
+$stmt5 = $pdo->prepare("SELECT * FROM image_accept WHERE gen_name=:gen_name && pill_num = :pill_num && num_times=:num_times ORDER BY rgtime DESC
+LIMIT 1;");
+$stmt5->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
+$stmt5->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);
+$stmt5->bindValue(':num_times', $num_times2, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+
+$status5 = $stmt5->execute();
+if ($status5 === false) {
+    // エラーハンドリング
+    sql_error($stmt5->errorInfo());
+} else {
+    $result5 = $stmt5->fetch(PDO::FETCH_ASSOC);
+    $image11 = $result5["image1"];
+}
+
+var_dump($image11);
+
+
+// ５．４ 画像ファイル検索２
+$stmt6 = $pdo->prepare("SELECT * FROM image_accept2 WHERE gen_name=:gen_name && pill_num = :pill_num && num_times=:num_times ORDER BY rgtime DESC
+LIMIT 1;");
+$stmt6->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
+$stmt6->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);
+$stmt6->bindValue(':num_times', $num_times2, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+
+$status6 = $stmt6->execute();
+if ($status6 === false) {
+    // エラーハンドリング
+    sql_error($stmt6->errorInfo());
+} else {
+    $result6 = $stmt6->fetch(PDO::FETCH_ASSOC);
+    $image22 = $result6["image2"];
+}
+
+var_dump($image22);
+
+
+
+
+
+
+
 
 
 ?>
@@ -184,7 +285,7 @@ foreach ($stmt4 as $row) {
       </div>
   </div>
 
-<form name="form21" action="accept_update.php" method="post">
+<form id="form" name="form21" action="accept_update.php" method="post">
     <div style="margin-left:20px;">
         <p>検査回数:　<?= $num_times2 ?>回目</p>
         <span id="view_clock"></span>
@@ -202,28 +303,28 @@ foreach ($stmt4 as $row) {
         <div style="display: flex; justify-content:space-around;margin:10px; width:700px;">
                     <div style="width:400px">
                          <input type="hidden" name="Id" value=<?= $accept_id ?> />
-                         <input type="hidden" name="Num_times" value=<?= $num_times ?> />
+                         <input type="hidden" name="Num_times" value=<?= $num_times2 ?> />
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
                               <p style="margin:5px;width:170px">〇スランプフロー:</p>
-                              <input type="text" name="Slump" style="width:80px" value='<?= $slump_ac ?>'/>
+                              <input type="text" name="Slump" id="slump" style="width:80px" value='<?= $slump_ac ?>'/>
                               <p style="margin:5px;">(cm)</p>
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
                               <p style="margin:5px;width:170px">〇空 気 量:</p>
-                              <input type="text" name="Air" style="width:80px" value='<?= $air_ac ?>' />
+                              <input type="text" name="Air" id="air" style="width:80px" value='<?= $air_ac ?>' />
                               <p style="margin:5px;">(％)</p>
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
                           <p style="margin:5px;width:170px">〇コンクリート温度:</p>
-                          <input type="text" name="Temp" style="width:80px" value='<?= $temp_ac ?>' />
+                          <input type="text" name="Temp" id="temp" style="width:80px" value='<?= $temp_ac ?>' />
                           <p style="margin:5px;">(℃)</p>
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
                           <p style="margin:5px;width:170px">〇塩化物イオン量:</p>
-                          <input type="text" name="Chlo" style="width:80px" value='<?= $ion_ac ?>'/>
+                          <input type="text" name="Chlo" id="chlo" style="width:80px" value='<?= $ion_ac ?>'/>
                           <p style="margin:5px;">(kg/m3)</p>
                           </div>
 
@@ -259,27 +360,36 @@ foreach ($stmt4 as $row) {
                           <p style="margin:5px;">秒</p>
                           </div>
 
-                          <input style="margin:10px;font-size:16px;" type="submit" value="修正" />
+                          <button style="margin:0px;font-size:18px; width:70px; height:30px;" type="button" value="修正" id="submit-button">修正</button>
 
-
+</form>
 
                             <!-- <form action="送信先パス" method="post" enctype="multipart/form-data"> -->
-                              <dl style="margin-left:20px;">
-                                <dd>
-                                  <div>
-                                      <label><span>〇カメラ（全景）</span>
-                                      <input type="file" capture="environment" accept="image/*"></label>
-                                  </div>
-                                  <div>
-                                        <label><span>〇カメラ（黒板）</span>
-                                        <input type="file" capture="environment" accept="image/*"></label>
-                                  </div>
-                                </dd>
-                              </dl>
+                            <dl style="margin-left:0px;">
+                            <dd>
+                              <div>
+                                <form method="post" enctype="multipart/form-data" action="">
+                                    <label><span>〇カメラ（全景）</span>
+                                    <input type="file" capture="environment" accept="image/*" name="image1"></label>
+                                    <input type="submit" name="upload" value="保存１">
+                                    <img src="images/<?= $image11 ?> " style="height:30px;width:40px;margin:10px"></img>
+                                </form>
+                              </div>
+                              <div>
+                              <form method="post" enctype="multipart/form-data" action="">
+                                    <label><span>〇カメラ（黒板）</span>
+                                    <input type="file" capture="environment" accept="image/*" name="image2"></label>
+                                    <input type="submit" name="upload2" value="保存２">
+                                    <img src="images/<?= $image22 ?> " style="height:30px;width:40px;margin:10px"></img>
+                             </form>
+                                
+                                </div>
+                            </dd>
+                          </dl>
                        </div>
                     </div>
         
-</form>
+
 
 <div style="margin-left:20px;">
  <p style="margin:0px 0px 0px 10px;">■受入検査記録値</p>
@@ -316,6 +426,84 @@ function getNow() {
 	var s = year + "年" + mon + "月" + day + "日" + hour + "時" + min + "分" + sec + "秒"; 
 	return s;
 }
+</script>
+
+<script>
+    // セレクトボックスの値取得
+    const slump = document.getElementById("slump");
+    const air = document.getElementById("air");
+    const temp = document.getElementById("temp");
+    const chlo = document.getElementById("chlo");
+
+    const form = document.getElementById("form");
+    const submitButton = document.getElementById("submit-button");
+
+
+    // １.スランプ管理値警告
+    slump.addEventListener("change", function (e) {
+        var slump_ac = slump.value;
+        var slumpmax = <?php echo $slumpmax ?>;
+        var slumpmin = <?php echo $slumpmin ?>;
+        if (slump_ac > slumpmax) {
+            var warn = "管理値上限：" + slumpmax + "を超えています";
+            alert(warn);
+        } else if (slump_ac < slumpmin) {
+            var warn2 = "管理値下限：" + slumpmin + "を超えています";
+            alert(warn2);
+        }
+    });
+
+    // ２.空気量管理値警告
+    air.addEventListener("change", function (e) {
+        var air_ac = air.value;
+        var airmax = <?php echo $airmax ?>;
+        var airmin = <?php echo $airmin ?>;
+        if (air_ac > airmax) {
+            var warn = "管理値上限：" + airmax + "を超えています";
+            alert(warn);
+        } else if (air_ac < airmin) {
+            var warn2 = "管理値下限：" + airmin + "を超えています";
+            alert(warn2);
+        }
+    });
+
+    // ３.コンクリート温度管理値警告
+    temp.addEventListener("change", function (e) {
+        var temp_ac = temp.value;
+        var tempmax = <?php echo $contempmax ?>;
+        var tempmin = <?php echo $contempmin ?>;
+        if (temp_ac > tempmax) {
+            var warn = "管理値上限：" + tempmax + "を超えています";
+            alert(warn);
+        } else if (temp_ac < tempmin) {
+            var warn2 = "管理値下限：" + tempmin + "を超えています";
+            alert(warn2);
+        }
+    });
+
+    // ４.塩化物管理値警告
+    chlo.addEventListener("change", function (e) {
+        var chlo_ac = chlo.value;
+        var chlomax = <?php echo $chlomax ?>;
+        if (chlo_ac > chlomax) {
+            var warn = "管理値上限：" + chlomax + "を超えています";
+            alert(warn);
+        }
+    });
+
+    // フォーム送信イベント
+    submitButton.onclick = function() {
+        const formData = new FormData(form);
+        const action = form.getAttribute("action");
+
+        fetch(action, {
+            method: 'POST',
+            body: formData,
+        });
+        document.location = "http://localhost:8888/cftcon/accept.php";
+
+
+    };
 </script>
 
 
