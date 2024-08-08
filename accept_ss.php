@@ -158,8 +158,7 @@ $pdo = db_conn();
         $image1 = uniqid(mt_rand(), true);//ファイル名をユニーク化
         $image1 .= '.' . substr(strrchr($_FILES['image1']['name'], '.'), 1);//アップロードされたファイルの拡張子を取得
         $file = "images/$image1";
-        $sql = " INSERT INTO image_accept(id, gen_name, pill_num, num_times, image1, rgtime) VALUES(NULL,:gen_name,:pill_num,:num_times,:image1,sysdate())";
-        $stmt = $pdo->prepare($sql);
+        $stmt = $pdo->prepare("INSERT INTO image_accept(id, gen_name, pill_num, num_times, image1, rgtime) VALUES(NULL,:gen_name,:pill_num,:num_times,:image1,sysdate())");
         $stmt->bindValue(':image1', $image1, PDO::PARAM_STR);
         $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
         $stmt->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
@@ -285,7 +284,7 @@ var_dump($image22);
       </div>
   </div>
 
-<form id="form" name="form21" action="accept_update.php" method="post">
+  <form id="form222" name="form21" action="accept_update.php" method="post">
     <div style="margin-left:20px;">
         <p>検査回数:　<?= $num_times2 ?>回目</p>
         <span id="view_clock"></span>
@@ -360,7 +359,8 @@ var_dump($image22);
                           <p style="margin:5px;">秒</p>
                           </div>
 
-                          <button style="margin:0px;font-size:18px; width:70px; height:30px;" type="button" value="修正" id="submit-button">修正</button>
+                          <input type="submit" id="submit-form222" style="margin:0px;font-size:18px; width:90px; height:40px;" value="修正" id="submit-form222"/>
+                          <!-- <button style="margin:0px;font-size:18px; width:70px; height:30px;" type="button" value="登録" id="submit-form222">登録</button> -->
 
 </form>
 
@@ -371,7 +371,7 @@ var_dump($image22);
                                 <form method="post" enctype="multipart/form-data" action="">
                                     <label><span>〇カメラ（全景）</span>
                                     <input type="file" capture="environment" accept="image/*" name="image1"></label>
-                                    <input type="submit" name="upload" value="保存１">
+                                    <input type="submit" id="upload1-button" name="upload" value="保存１">
                                     <img src="images/<?= $image11 ?> " style="height:30px;width:40px;margin:10px"></img>
                                 </form>
                               </div>
@@ -379,7 +379,7 @@ var_dump($image22);
                               <form method="post" enctype="multipart/form-data" action="">
                                     <label><span>〇カメラ（黒板）</span>
                                     <input type="file" capture="environment" accept="image/*" name="image2"></label>
-                                    <input type="submit" name="upload2" value="保存２">
+                                    <input type="submit" id="upload2-button" name="upload2" value="保存２">
                                     <img src="images/<?= $image22 ?> " style="height:30px;width:40px;margin:10px"></img>
                              </form>
                                 
@@ -491,19 +491,33 @@ function getNow() {
         }
     });
 
-    // フォーム送信イベント
-    submitButton.onclick = function() {
-        const formData = new FormData(form);
-        const action = form.getAttribute("action");
+    // // フォーム送信イベント
+    // submitButton.onclick = function() {
+    //     const formData = new FormData(form);
+    //     const action = form.getAttribute("action");
 
-        fetch(action, {
-            method: 'POST',
-            body: formData,
-        });
-        document.location = "http://localhost:8888/cftcon/accept.php";
+    //     fetch(action, {
+    //         method: 'POST',
+    //         body: formData,
+    //     });
+    //     document.location = "https://ai9745.sakura.ne.jp/cftcon/accept.php";
 
+      // フォーム送信イベント
+      submitForm222Button.addEventListener("click", function(event) {
+        event.preventDefault();  // デフォルトのフォーム送信を防止
+        form222.submit();  // フォームを送信
+    });
 
-    };
+    // カメラフォーム送信イベント
+    document.getElementById("upload1-button").addEventListener("click", function(event) {
+        event.preventDefault();
+        document.getElementById("form-upload1").submit();
+    });
+
+    document.getElementById("upload2-button").addEventListener("click", function(event) {
+        event.preventDefault();
+        document.getElementById("form-upload2").submit();
+    });
 </script>
 
 

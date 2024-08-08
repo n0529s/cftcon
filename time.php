@@ -204,74 +204,7 @@ var_dump($rgtime3);
    </div>
 
 <!-- グラフ表示位置変更 -->
-<script type="text/javascript">
-      var canvas;
-      var ctx;
 
-      function init() {
-          canvas = document.getElementById("chart");
-          canvas.style.position = "absolute";
-          canvas.style.right = "80px";
-          canvas.style.top = "260px";
-          ctx = canvas.getContext("2d");
-          
-          draw();
-      }
-
-      function draw() {
-          ctx.style = "#000000";
-          ctx.rect( 0, 0, 100, 100 );
-          ctx.stroke();
-      }
-
-      window.onload = function() {
-          init();
-      };
-
-
-<!-- グラフ表示設定 -->
-
-        var ctx = document.getElementById("chart");
-        var myLineChart = new Chart(ctx, {
-          // グラフの種類：折れ線グラフを指定
-          type: 'line',
-          data: {
-            // x軸の各メモリ
-            labels: [],
-            datasets: [
-              {
-                label: '打上り完了時間',
-                data: [],
-                borderColor: "#ea2260",
-                lineTension: 0, //<===追加
-                fill: true, 
-                backgroundColor: "#00000000"
-                          
-              },
-            ],
-          },
-          options: {
-            title: {
-              display: true,
-              text: '打上り高さ管理'
-            },
-            scales: {
-              yAxes: [{
-                        // type: 'time',
-                        // distribution: 'series'
-                        ticks: {
-                          suggestedMax: 100,
-                          suggestedMin: 50,
-                          stepSize: 10,  // 縦メモリのステップ数
-                          callback: function(value, index, values){
-
-                    return  value +  'sec'  // 各メモリのステップごとの表記（valueは各ステップの値）
-                  }
-                }
-              }]
-            },
-          }
-        });
 
 // トグルスイッチのJQuery
 
@@ -427,4 +360,71 @@ resetButton.addEventListener('click', function() {
 
 
 </body>
-</html>
+</html><script type="text/javascript">
+      var canvas;
+      var ctx;
+
+      function init() {
+          canvas = document.getElementById("chart");
+          canvas.style.position = "absolute";
+          canvas.style.right = "80px";
+          canvas.style.top = "260px";
+          ctx = canvas.getContext("2d");
+          
+          draw();
+      }
+
+      function draw() {
+          ctx.style = "#000000";
+          ctx.rect( 0, 0, 100, 100 );
+          ctx.stroke();
+      }
+
+      window.onload = function() {
+          init();
+      };
+
+
+<!-- グラフ表示設定 -->
+
+        var ctx = document.getElementById("chart");
+        var myLineChart = new Chart(ctx, {
+          // グラフの種類：折れ線グラフを指定
+          type: 'line',
+          data: {
+            // x軸の各メモリ
+            labels: [],
+            datasets: [
+              {
+                label: '打上り完了時間',
+                data: [],
+                borderColor: "#ea2260",
+                lineTension: 0, //<===追加
+                fill: true, 
+                backgroundColor: "#00000000"
+                          
+              },
+            ],
+          },
+          options: {
+            title: {
+              display: true,
+              text: '打上り高さ管理'
+            },
+            scales: {
+              yAxes: [{
+                        // type: 'time',
+                        // distribution: 'series'
+                        ticks: {
+                          suggestedMax: 100,
+                          suggestedMin: 50,
+                          stepSize: 10,  // 縦メモリのステップ数
+                          callback: function(value, index, values){
+
+                    return  value +  'sec'  // 各メモリのステップごとの表記（valueは各ステップの値）
+                  }
+                }
+              }]
+            },
+          }
+        });

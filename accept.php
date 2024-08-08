@@ -7,7 +7,7 @@ $username = $_SESSION['username'];
 $gen_name = $_SESSION['gen_name'];
 $pill_num = $_SESSION["pill_num"];
 
-var_dump($pill_num);
+
 
 
 
@@ -93,7 +93,9 @@ foreach ($stmt4 as $row) {
   $chlomax =$row['chlomax'];
 }
 
-var_dump($slumpmin);
+
+
+
 
 // ５．１ 画像ファイルアップロード1
 $pdo = db_conn();
@@ -101,18 +103,17 @@ $pdo = db_conn();
         $image1 = uniqid(mt_rand(), true);//ファイル名をユニーク化
         $image1 .= '.' . substr(strrchr($_FILES['image1']['name'], '.'), 1);//アップロードされたファイルの拡張子を取得
         $file = "images/$image1";
-        $sql = " INSERT INTO image_accept(id, gen_name, pill_num, num_times, image1, rgtime) VALUES(NULL,:gen_name,:pill_num,:num_times,:image1,sysdate())";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':image1', $image1, PDO::PARAM_STR);
-        $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
-        $stmt->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
-        $stmt->bindValue(':num_times', $num_times, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+        $stmt11 = $pdo->prepare("INSERT INTO image_accept(id, gen_name, pill_num, num_times, image1, rgtime) VALUES(NULL,:gen_name,:pill_num,:num_times,:image1,sysdate())");
+        $stmt11->bindValue(':image1', $image1, PDO::PARAM_STR);
+        $stmt11->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+        $stmt11->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+        $stmt11->bindValue(':num_times', $num_times, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 
         if (!empty($_FILES['image1']['name'])) {//ファイルが選択されていれば$imageにファイル名を代入
             move_uploaded_file($_FILES['image1']['tmp_name'], './images/' . $image1);//imagesディレクトリにファイル保存
             if (exif_imagetype($file)) {//画像ファイルかのチェック
                 $message = '画像をアップロードしました';
-                $stmt->execute();
+                $stmt11->execute();
             } else {
                 $message = '画像ファイルではありません';
             }
@@ -120,32 +121,34 @@ $pdo = db_conn();
     }
 
 // ５．２ 画像ファイルアップロード２
-$pdo = db_conn();
+// $pdo = db_conn();
 if (isset($_POST['upload2'])) {//送信ボタンが押された場合
     $image2 = uniqid(mt_rand(), true);//ファイル名をユニーク化
     $image2 .= '.' . substr(strrchr($_FILES['image2']['name'], '.'), 1);//アップロードされたファイルの拡張子を取得
     $file2 = "images/$image2";
-    $sql = " INSERT INTO image_accept2(id, gen_name, pill_num, num_times, image2, rgtime) VALUES(NULL,:gen_name,:pill_num,:num_times,:image2,sysdate())";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':image2', $image2, PDO::PARAM_STR);
-    $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
-    $stmt->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
-    $stmt->bindValue(':num_times', $num_times, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+    $sql22 = " INSERT INTO image_accept2(id, gen_name, pill_num, num_times, image2, rgtime) VALUES(NULL,:gen_name,:pill_num,:num_times,:image2,sysdate())";
+    $stmt22 = $pdo->prepare($sql22);
+    $stmt22->bindValue(':image2', $image2, PDO::PARAM_STR);
+    $stmt22->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+    $stmt22->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
+    $stmt22->bindValue(':num_times', $num_times, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
 
     if (!empty($_FILES['image2']['name'])) {//ファイルが選択されていれば$imageにファイル名を代入
         move_uploaded_file($_FILES['image2']['tmp_name'], './images/' . $image2);//imagesディレクトリにファイル保存
         if (exif_imagetype($file2)) {//画像ファイルかのチェック
             $message = '画像をアップロードしました';
-            $stmt->execute();
+            $stmt22->execute();
         } else {
             $message = '画像ファイルではありません';
         }
     }
 }
 
+
+
+
 // ５．３ 画像ファイル検索
-$stmt5 = $pdo->prepare("SELECT * FROM image_accept WHERE gen_name=:gen_name && pill_num = :pill_num && num_times=:num_times ORDER BY rgtime DESC
-LIMIT 1;");
+$stmt5 = $pdo->prepare("SELECT * FROM image_accept WHERE gen_name=:gen_name && pill_num = :pill_num && num_times=:num_times ORDER BY rgtime DESC LIMIT 1;");
 $stmt5->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
 $stmt5->bindValue(':pill_num', $pill_num, PDO::PARAM_STR);
 $stmt5->bindValue(':num_times', $num_times, PDO::PARAM_STR);  //Integer（数値の場合 PDO::PARAM_INT)
@@ -159,7 +162,7 @@ if ($status5 === false) {
     $image11 = $result5["image1"];
 }
 
-var_dump($image11);
+
 
 
 // ５．４ 画像ファイル検索２
@@ -178,7 +181,7 @@ if ($status6 === false) {
     $image22 = $result6["image2"];
 }
 
-var_dump($image22);
+
 
 
 
@@ -226,7 +229,7 @@ var_dump($image22);
     </div>
 </div>
 
-<form id="form" name="form21" action="accept_act.php" method="post">
+<form id="form222" name="form21" action="accept_act.php" method="post">
         <div style="margin-left:20px;">
         <p>検査回数:　<?= $num_times ?>回目</p>
         <span id="view_clock"></span>
@@ -246,25 +249,25 @@ var_dump($image22);
                          <input type="hidden" name="Num_times" value=<?= $num_times ?> />
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
                           <p style="margin:5px;width:170px">〇スランプフロー:</p>
-                          <input name="Slump" id="slump" style="width:80px"/>
+                          <input type="number" name="Slump" id="slump" style="width:80px"/>
                           <p style="margin:5px;">(cm)</p>
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
                           <p style="margin:5px;width:170px">〇空 気 量:</p>
-                          <input type="text" name="Air" id="air" style="width:80px"/>
+                          <input type="number" step="0.1" name="Air" id="air" style="width:80px"/>
                           <p style="margin:5px;">(％)</p>
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
                           <p style="margin:5px;width:170px">〇コンクリート温度:</p>
-                          <input type="text" name="Temp" id="temp" style="width:80px"/>
+                          <input type="number" name="Temp" id="temp" style="width:80px"/>
                           <p style="margin:5px;">(℃)</p>
                           </div>
 
                           <div style="display: flex; justify-content:flex-start;margin:5px;padding:5px;width:400px;">
                           <p style="margin:5px;width:170px">〇塩化物イオン量:</p>
-                          <input type="text" name="Chlo" id="chlo" style="width:80px"/>
+                          <input type="number" step="0.1" name="Chlo" id="chlo" style="width:80px"/>
                           <p style="margin:5px;">(kg/m3)</p>
                           </div>
 
@@ -307,28 +310,29 @@ var_dump($image22);
                           <input type="text" name="Stop_time" style="width:80px"/>
                           <p style="margin:5px;">秒</p>
                           </div>
-
-                          <button style="margin:0px;font-size:18px; width:70px; height:30px;" type="button" value="登録" id="submit-button">登録</button>
+                          <input type="submit" id="submit-form222" style="margin:0px;font-size:18px; width:90px; height:40px;" value="登録" id="submit-form222"/>
+                          <!-- <button style="margin:0px;font-size:18px; width:70px; height:30px;" type="button" value="登録" id="submit-form222">登録</button> -->
 
  </form>
 
-                          <dl style="margin-left:0px;">
+ <dl style="margin-left:0px;">
                             <dd>
                               <div>
-                                <form method="post" enctype="multipart/form-data" action="upload_act.php">
+                                <form id="form" method="post" enctype="multipart/form-data" action="">
                                     <label><span>〇カメラ（全景）</span>
                                     <input type="file" capture="environment" accept="image/*" name="image1"></label>
-                                    <input type="submit" name="upload" value="保存１">
+                                    <input type="submit" id="upload1-button" name="upload" value="保存１">
                                     <img src="images/<?= $image11 ?> " style="height:30px;width:40px;margin:10px"></img>
                                 </form>
                               </div>
                               <div>
-                              <form method="post" enctype="multipart/form-data" action="">
+                              <form id="form" method="post" enctype="multipart/form-data" action="">
                                     <label><span>〇カメラ（黒板）</span>
                                     <input type="file" capture="environment" accept="image/*" name="image2"></label>
-                                    <input type="submit" name="upload2" value="保存２">
+                                    <input type="submit" id="upload2-button" name="upload2" value="保存２">
                                     <img src="images/<?= $image22 ?> " style="height:30px;width:40px;margin:10px"></img>
                              </form>
+                                
                                 
                                 </div>
                             </dd>
@@ -433,19 +437,38 @@ function getNow() {
         }
     });
 
-    // フォーム送信イベント
-    submitButton.onclick = function() {
-        const formData = new FormData(form);
-        const action = form.getAttribute("action");
+    // // フォーム送信イベント
+    // submitButton.onclick = function() {
+    //     const formData = new FormData(form);
+    //     const action = form.getAttribute("action");
 
-        fetch(action, {
-            method: 'POST',
-            body: formData,
-        });
-        document.location = "http://localhost:8888/cftcon/accept.php";
+    //     fetch(action, {
+    //         method: 'POST',
+    //         body: formData,
+    //     });
+    //     document.location = "https://ai9745.sakura.ne.jp/cftcon/accept.php";
+
+      // フォーム送信イベント
+      submitForm222Button.addEventListener("click", function(event) {
+        event.preventDefault();  // デフォルトのフォーム送信を防止
+        form222.submit();  // フォームを送信
+    });
+
+    // カメラフォーム送信イベント
+    document.getElementById("upload1-button").addEventListener("click", function(event) {
+        event.preventDefault();
+        document.getElementById("form-upload1").submit();
+    });
+
+    document.getElementById("upload2-button").addEventListener("click", function(event) {
+        event.preventDefault();
+        document.getElementById("form-upload2").submit();
+    });
 
 
-    };
+ 
+
+
 </script>
 
 
