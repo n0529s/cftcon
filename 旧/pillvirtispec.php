@@ -7,38 +7,23 @@ $username = $_SESSION['username'];
 $gen_name = $_SESSION['gen_name'];
 
 
-$pill_sign = $_GET["id"];
-
-
 
 
 require_once('funcs.php');
+
 
 //ログインチェック
 // loginCheck();
 $pdo = db_conn();
 
 
-
-
-
-// １．gr_name抽出
-$stmt = $pdo->prepare("SELECT * from pillvirtispec WHERE pill_sign = '$pill_sign'");
-$status7 = $stmt->execute();
-
-if($status7==false){
-  $error = $stmt->errorInfo();
-  exit("QueryError:".$error[2]);
-}
-$val = $stmt->fetch(); //1レコードだけ取得する方法
-$gr_name = $val["gr_name"]; 
-// var_dump($gr_name);
-
-
-
-//２． 断面グループ抽出
+// ２．断面グループ選択＿断面グループ抽出
 $stmt = $pdo->prepare("SELECT * from pillcrossspec WHERE 1");
 $status2 = $stmt->execute();
+
+
+
+// var_dump($status);
 
 $select = "<select name='gr_name' style='color:white; border-color:#3b82f6;color:white; font-size:18px;margin:10px; background-color:#8EA9DB; border-radius:5px; width:200px;'>";
 $select .= "<br><option value=''>-</option>";
@@ -64,32 +49,43 @@ else{
       $gr_name_b = array_unique($gr_name_a);
 
       if($gr_name_c != $gr_name_b ){
-        if($gr_name == $result2['gr_name']){
+        // if($gr_name == $result2['gr_name']){
           
-          $select .= '<option value="'.$result2['gr_name'].'"selected>'.$result2['gr_name'].'</option>';
-        }
-        elseif($gr_name == $result2['gr_name']){
+        //   $select .= '<option value="'.$result2['gr_name'].'"selected>'.$result2['gr_name'].'</option>';
+        // }
+        // elseif($gr_name == $result2['gr_name']){
 
-          $select .= '<option value="'.$result2['gr_name'].'"selected>'.$result2['gr_name'].'</option>';
-        }
+        //   $select .= '<option value="'.$result2['gr_name'].'"selected>'.$result2['gr_name'].'</option>';
+        // }
       
-        else{
+        // else{
         
           $select .= '<option value="'.$result2['gr_name'].'">'.$result2['gr_name'].'</option>';
-        }
+        // }
         
       }
     }
     $select .= '</select>';
     }
+  
 
-// // ２．選択した断面抽出
-// $pillcrossnum_a= array();
+ // ３．断面選択＿断面名抽出
 
-// $stmt = $pdo->prepare("SELECT * from pillvirtispec WHERE pill_sign = :pill_sign");
-// $stmt->bindValue(':pill_sign', $pill_sign, PDO::PARAM_STR);
-// $status22 = $stmt->execute();
-// if($status22==false) {
+
+// $stmt = $pdo->prepare("SELECT * from pillcrossspec WHERE gr_name = :gr_name");
+// $stmt->bindValue(':gr_name', $gr_name, PDO::PARAM_STR);
+// $status3 = $stmt->execute();
+
+
+
+// // var_dump($status);
+
+// $select3 = "<select name='pill_crossnum[]' style='color:white; border-color:#3b82f6;color:white; font-size:16px;margin:5px; background-color:#8EA9DB; border-radius:5px; width:200px;height:30px;'>";
+// $select3 .= "<br><option value=''>-</option>";
+// // 配列グループ作成
+
+
+// if($status3==false) {
 //   //execute（SQL実行時にエラーがある場合）
 //   $error = $stmt->errorInfo();
 //   exit("ErrorQuery:".$error[2]);
@@ -97,43 +93,13 @@ else{
 // else{
 // //Selectデータの数だけ自動でループしてくれる
 // //FETCH_ASSOC=http://php.net/manual/ja/pdostatement.fetch.php
-//   while( $result22 = $stmt->fetch(PDO::FETCH_ASSOC)){      
-// //選択した断面を抽出 
-//           $pillcrossnum_a[] = $result22['pill_crossnum'];
+//   while( $result3 = $stmt->fetch(PDO::FETCH_ASSOC)){ 
+//           $select3 .= '<option value="'.$result3['pill_crossnum'].'">'.$result3['pill_crossnum'].'</option>';
 //         }
         
 //       }
-
-// var_dump($pillcrossnum_a);
-
-
-
- // ３．断面名抽出
-$stmt = $pdo->prepare("SELECT * from pillcrossspec WHERE gr_name = :gr_name");
-$stmt->bindValue(':gr_name', $gr_name, PDO::PARAM_STR);
-$status3 = $stmt->execute();
-
-$select3 = "<select name='pill_crossnum[]' style='color:white; border-color:#3b82f6;color:white; font-size:16px;margin:5px; background-color:#8EA9DB; border-radius:5px; width:200px;height:30px;'>";
-$select3 .= "<br><option value=''>-</option>";
-
-// 配列グループ作成
-
-
-if($status3==false) {
-  //execute（SQL実行時にエラーがある場合）
-  $error = $stmt->errorInfo();
-  exit("ErrorQuery:".$error[2]);
-}
-else{
-//Selectデータの数だけ自動でループしてくれる
-//FETCH_ASSOC=http://php.net/manual/ja/pdostatement.fetch.php
-  while( $result3 = $stmt->fetch(PDO::FETCH_ASSOC)){ 
-          $select3 .= '<option value="'.$result3['pill_crossnum'].'">'.$result3['pill_crossnum'].'</option>'; 
-        }
-        
-      }
     
-    $select3 .= '</select>';
+//     $select3 .= '</select>';
 
 
 
@@ -141,8 +107,8 @@ else{
 
 
 
-// ４．フロア情報抽出
-$stmt = $pdo->prepare("SELECT * FROM floor WHERE gen_name = :gen_name ORDER BY id DESC");
+// ４．フロア名表示＿フロア情報抽出
+$stmt = $pdo->prepare("SELECT * FROM floor WHERE gen_name = :gen_name ORDER BY id DESC ");
 $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
 $status = $stmt->execute();
 
@@ -163,21 +129,17 @@ else{
       
       $view_v .= '<div style="display: flex;justify-content:flex-start;margin:0px;padding:0px;width:300px;">'; // Added semicolon
       $view_v .= '<p style="margin:10px;">' . $result['floor_num'] . '</p>';
-      $view_v .= ' <input type="hidden" name="gr_name" value="'.$gr_name.'">';
       $view_v .= ' <input type="hidden" name="floor_num[]" value="'.$result['floor_num'] .'">';
       $view_v .= ' <input type="hidden" name="floor_height[]" value="'.$result['floor_height'] .'">';
-      // select文生成
-
-
-      $view_v .= $select3; 
+      // $view_v .= $select3; 
       $view_v .= '</div>';
       
   }
 }
 
 
-// 55.表一覧＿杭符号情報抽出
-$stmt = $pdo->prepare("select * from pillvirtispec where gen_name = :gen_name ORDER BY id DESC");
+// ５５．表一覧＿杭符号情報抽出
+$stmt = $pdo->prepare("select * from pillvirtispec where gen_name = :gen_name ORDER BY id DESC ");
 $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
 $status = $stmt->execute();
 
@@ -218,7 +180,7 @@ $view_vspec4 = "<tr><td></td>";
       if($pill_sign_c != $pill_sign_b ){
         $view_vspec .= '<th style="width:150px;">'.$result4['pill_sign'].'</th>';
 
-        $view_vspec3.= '<td id="ss"><a href=pillvirtispec2.php?id='.$result4['pill_sign'].'>修正</td>';
+        $view_vspec3.= '<td id="ss"><a href=pillvirtispec_ss.php?id='.$result4['pill_sign'].'>修正</td>';
         $view_vspec4 .= '<td id="aa"><a href=pillvirtispec_aa.php?id='.$result4['pill_sign'].'>削除</td>';
       }
 
@@ -325,7 +287,7 @@ $view_vspec4 .= '</tr>';
 
 
 <div style="display: flex;justify-content:flex-start;">
-<form name="form2" action="pillvirtispec.php" method="post" style="font-size:14px;">
+<form name="form2" action="pillvirtispec2.php" method="post" style="font-size:14px;">
 <div style="display: flex;justify-content:flex-start;margin:5px;width:600px;">
 <p style="font-size:20px;margin:10px;">断面選択：</p>
 <?= $select ?>
@@ -335,15 +297,15 @@ $view_vspec4 .= '</tr>';
 </form>
 
 <div style="display: flex;justify-content:flex-start;">
-<form name="form1" action="pillvirtispec_update.php" method="post" style="font-size:14px;">
+<form name="form1" action="pillvirtispec_act.php" method="post" style="font-size:14px;">
 <div style="display: flex; justify-content:flex-start;margin:5px;">
 <p style="font-size:20px;margin:10px;">柱符号入力：</p>
- <input type="text" name="pill_sign" style="margin:10px;Width:100px;" value=<?= $pill_sign ?> />
+ <input type="text" name="pill_sign" style="margin:10px;Width:100px;"/>
 </div>
 <p style="font-size:20px;margin:10px;">階毎断面設定：</p>
 <?= $view_v ?>
 
-<input style="font-size:20px;margin:10px;" type="submit" value="修正" />
+<input style="font-size:20px;margin:10px;" type="submit" value="登録" />
 
 </form>
 

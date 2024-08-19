@@ -108,7 +108,7 @@ else{
 
 
 // ４．フロア名表示＿フロア情報抽出
-$stmt = $pdo->prepare("SELECT * FROM floor WHERE gen_name = :gen_name ORDER BY id DESC ");
+$stmt = $pdo->prepare("SELECT * FROM floor WHERE gen_name = :gen_name ORDER BY id DESC "); 
 $stmt->bindValue(':gen_name', $gen_name, PDO::PARAM_STR);
 $status = $stmt->execute();
 
@@ -198,6 +198,9 @@ $view_vspec .= '</tr>';
 $view_vspec2 ="";
 
 $floorNum = count($floor_num_c);
+
+// var_dump($floorNum);
+// var_dump($pill_sign_a);
 
 
 

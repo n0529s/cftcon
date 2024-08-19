@@ -11,7 +11,6 @@ $pill_sign = $_GET["id"];
 
 
 
-
 require_once('funcs.php');
 
 //ログインチェック
@@ -163,7 +162,6 @@ else{
       
       $view_v .= '<div style="display: flex;justify-content:flex-start;margin:0px;padding:0px;width:300px;">'; // Added semicolon
       $view_v .= '<p style="margin:10px;">' . $result['floor_num'] . '</p>';
-      $view_v .= ' <input type="hidden" name="gr_name" value="'.$gr_name.'">';
       $view_v .= ' <input type="hidden" name="floor_num[]" value="'.$result['floor_num'] .'">';
       $view_v .= ' <input type="hidden" name="floor_height[]" value="'.$result['floor_height'] .'">';
       // select文生成
